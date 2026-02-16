@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UHF Trading Platform - Complete PSX API Documentation</title>
+    <title>UHF Trading Platform - Live PSX API Documentation</title>
     <style>
         * {
             margin: 0;
@@ -12,24 +11,27 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #0B0F1C;
             color: #E5E7EB;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* Scrollbar */
+        /* Binance-style scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: #1E2329;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #474D57;
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #5E6673;
         }
@@ -45,61 +47,72 @@
             background: linear-gradient(135deg, #1E2329 0%, #2B3139 100%);
             padding: 30px;
             border-radius: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             border: 1px solid #2B3139;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             position: relative;
-            z-index: 10;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(240, 185, 11, 0.1) 0%, transparent 50%);
+            animation: pulse 10s infinite;
         }
 
         .header h1 {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 600;
             color: #F0B90B;
             margin-bottom: 10px;
+            position: relative;
         }
 
         .header .subtitle {
-            font-size: 18px;
+            font-size: 16px;
             color: #A6B0C2;
-            margin-bottom: 15px;
+            position: relative;
         }
 
         .header .badge {
             background: #F0B90B;
             color: #0B0F1C;
-            padding: 8px 16px;
-            border-radius: 30px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             display: inline-block;
+            margin-top: 15px;
+            position: relative;
         }
 
-        /* WebSocket Status */
+        /* WebSocket Status Bar */
         .ws-status {
             background: #1E2329;
             border: 1px solid #2B3139;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px 20px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
         .ws-indicator {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: #2B3139;
-            padding: 10px 20px;
-            border-radius: 40px;
+            gap: 10px;
         }
 
         .ws-led {
-            width: 16px;
-            height: 16px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: #F6465D;
             transition: all 0.3s;
@@ -107,7 +120,7 @@
 
         .ws-led.connected {
             background: #0ECB81;
-            box-shadow: 0 0 15px #0ECB81;
+            box-shadow: 0 0 10px #0ECB81;
             animation: pulse 2s infinite;
         }
 
@@ -117,71 +130,42 @@
         }
 
         .ws-info {
-            color: #F0B90B;
-            font-size: 14px;
-            font-weight: 500;
+            color: #A6B0C2;
+            font-size: 13px;
         }
 
         .ws-stats {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             margin-left: auto;
-            background: #2B3139;
-            padding: 10px 20px;
-            border-radius: 40px;
         }
 
         .ws-stat {
-            text-align: center;
+            text-align: right;
         }
 
         .ws-stat-label {
             color: #A6B0C2;
             font-size: 11px;
-            text-transform: uppercase;
         }
 
         .ws-stat-value {
             color: #F0B90B;
             font-weight: 600;
-            font-size: 16px;
-        }
-
-        /* WebSocket Controls */
-        .ws-controls {
-            background: #1E2329;
-            border: 1px solid #2B3139;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .ws-btn {
-            padding: 12px 24px;
-            border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .ws-btn.connect { background: #0ECB81; color: #0B0F1C; }
-        .ws-btn.connect:hover { background: #0AB574; transform: translateY(-2px); }
-        .ws-btn.disconnect { background: #F6465D; color: white; }
-        .ws-btn.disconnect:hover { background: #D43F53; transform: translateY(-2px); }
-        .ws-btn.subscribe { background: #F0B90B; color: #0B0F1C; }
-        .ws-btn.subscribe:hover { background: #D6A50A; transform: translateY(-2px); }
-        .ws-btn.orders { background: #8B5CF6; color: white; }
-        .ws-btn.orders:hover { background: #7C4DF0; transform: translateY(-2px); }
-        .ws-btn.clear { background: #2B3139; color: #A6B0C2; border: 1px solid #3A3F4A; }
-        .ws-btn.clear:hover { border-color: #F0B90B; color: #F0B90B; }
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
 
         /* Navigation */
         .nav {
@@ -192,10 +176,10 @@
             border: 1px solid #2B3139;
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             position: sticky;
             top: 20px;
-            z-index: 100;
+            z-index: 1000;
             backdrop-filter: blur(10px);
         }
 
@@ -204,15 +188,19 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            padding: 8px 16px;
+            padding: 5px 10px;
             border-radius: 8px;
             transition: all 0.3s;
-            cursor: pointer;
         }
 
-        .nav a:hover, .nav a.active {
+        .nav a:hover {
             color: #F0B90B;
             background: #2B3139;
+        }
+
+        .nav a.active {
+            color: #F0B90B;
+            border-bottom: 2px solid #F0B90B;
         }
 
         /* Section Headers */
@@ -220,70 +208,85 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 40px 0 20px;
-            padding-top: 10px;
+            margin: 40px 0 20px 0;
         }
 
         .section-header h2 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
             color: #F0B90B;
-            border-left: 5px solid #F0B90B;
-            padding-left: 20px;
+            border-left: 4px solid #F0B90B;
+            padding-left: 15px;
         }
 
         .section-header .version {
             background: #1E2329;
             color: #A6B0C2;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             border: 1px solid #2B3139;
         }
 
-        /* Market Segments */
-        .market-segments {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .segment-card {
+        /* Endpoint Card */
+        .endpoint-card {
             background: #1E2329;
             border: 1px solid #2B3139;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s;
         }
 
-        .segment-card:hover {
-            border-color: #F0B90B;
+        .endpoint-card:hover {
             transform: translateY(-2px);
+            border-color: #F0B90B;
         }
 
-        .segment-card .name {
-            color: #F0B90B;
+        .endpoint-header {
+            background: #2B3139;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #3A3F4A;
+        }
+
+        .method {
+            background: #F0B90B;
+            color: #0B0F1C;
+            padding: 5px 15px;
+            border-radius: 20px;
             font-weight: 600;
+            font-size: 14px;
+        }
+
+        .method.ws {
+            background: #8B5CF6;
+            color: white;
+        }
+
+        .endpoint-url {
+            color: #F0B90B;
+            font-family: 'Monaco', 'Menlo', monospace;
             font-size: 16px;
-            margin-bottom: 8px;
         }
 
-        .segment-card .desc {
+        .endpoint-desc {
             color: #A6B0C2;
-            font-size: 12px;
+            font-size: 14px;
+            margin-left: auto;
         }
 
-        /* Trading Grid */
+        /* Grid Layout for Trading View */
         .trading-grid {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 350px;
             gap: 20px;
             margin-bottom: 30px;
         }
 
-        /* Chart Container */
+        /* Chart Container - Binance Style */
         .chart-container {
             background: #1E2329;
             border: 1px solid #2B3139;
@@ -303,31 +306,41 @@
         .symbol-info {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
         }
 
         .symbol-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
             color: #F0B90B;
         }
 
         .current-price {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 600;
             color: #0ECB81;
         }
 
-        .price-change.positive { color: #0ECB81; }
-        .price-change.negative { color: #F6465D; }
+        .price-change {
+            font-size: 16px;
+        }
+
+        .price-change.positive {
+            color: #0ECB81;
+        }
+
+        .price-change.negative {
+            color: #F6465D;
+        }
 
         .interval-selector {
             display: flex;
-            gap: 5px;
+            gap: 8px;
             background: #2B3139;
             padding: 4px;
-            border-radius: 10px;
+            border-radius: 8px;
+            flex-wrap: wrap;
         }
 
         .interval-btn {
@@ -341,8 +354,14 @@
             transition: all 0.3s;
         }
 
-        .interval-btn:hover { color: #F0B90B; }
-        .interval-btn.active { background: #F0B90B; color: #0B0F1C; }
+        .interval-btn:hover {
+            color: #F0B90B;
+        }
+
+        .interval-btn.active {
+            background: #F0B90B;
+            color: #0B0F1C;
+        }
 
         /* Chart Area */
         .chart-area {
@@ -350,39 +369,40 @@
             background: #2B3139;
             border-radius: 12px;
             position: relative;
-            margin-bottom: 15px;
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
         .candles {
             position: relative;
             height: 100%;
             width: 100%;
-            padding: 20px 0;
         }
 
         .candle {
             position: absolute;
-            bottom: 15%;
+            bottom: 20%;
             width: 8px;
             background: #0ECB81;
             border-radius: 2px;
-            transition: all 0.2s;
+            transition: all 0.3s;
             cursor: pointer;
         }
 
         .candle:hover {
             transform: scaleX(1.5);
             z-index: 100;
-            box-shadow: 0 0 15px #F0B90B;
         }
 
-        .candle.red { background: #F6465D; }
+        .candle.red {
+            background: #F6465D;
+        }
 
         .volume-bars {
             height: 60px;
             background: #2B3139;
             border-radius: 8px;
+            margin-top: 10px;
             display: flex;
             align-items: flex-end;
             gap: 2px;
@@ -391,18 +411,16 @@
         .volume-bar {
             flex: 1;
             background: #F0B90B;
-            opacity: 0.4;
+            opacity: 0.3;
             height: 100%;
-            transition: all 0.2s;
-            cursor: pointer;
+            transition: height 0.3s;
         }
 
         .volume-bar:hover {
             opacity: 0.8;
-            transform: scaleY(1.1);
         }
 
-        /* Order Book */
+        /* Order Book - Binance Style */
         .order-book {
             background: #1E2329;
             border: 1px solid #2B3139;
@@ -413,10 +431,10 @@
         .order-book-header {
             display: flex;
             justify-content: space-between;
-            color: #F0B90B;
-            font-size: 13px;
+            color: #A6B0C2;
+            font-size: 12px;
             padding: 10px 0;
-            border-bottom: 2px solid #2B3139;
+            border-bottom: 1px solid #2B3139;
         }
 
         .order-book-row {
@@ -424,21 +442,27 @@
             justify-content: space-between;
             padding: 6px 0;
             font-size: 14px;
-            font-family: monospace;
-            transition: all 0.2s;
+            font-family: 'Monaco', 'Menlo', monospace;
+            transition: background 0.2s;
             cursor: pointer;
         }
 
         .order-book-row:hover {
             background: #2B3139;
-            padding-left: 5px;
-            padding-right: 5px;
         }
 
-        .bid-price { color: #0ECB81; font-weight: 600; }
-        .ask-price { color: #F6465D; font-weight: 600; }
+        .bid-price {
+            color: #0ECB81;
+            font-weight: 600;
+        }
 
-        .order-book-bids, .order-book-asks {
+        .ask-price {
+            color: #F6465D;
+            font-weight: 600;
+        }
+
+        .order-book-bids,
+        .order-book-asks {
             max-height: 200px;
             overflow-y: auto;
         }
@@ -463,53 +487,28 @@
             font-weight: 600;
         }
 
-        /* Endpoint Card */
-        .endpoint-card {
+        /* JSON Editor - Binance Style */
+        .json-editor {
             background: #1E2329;
             border: 1px solid #2B3139;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .endpoint-header {
-            background: #2B3139;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid #3A3F4A;
-        }
-
-        .method {
-            background: #F0B90B;
-            color: #0B0F1C;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .method.ws { background: #8B5CF6; color: white; }
-
-        .endpoint-url {
-            color: #F0B90B;
-            font-family: monospace;
-            font-size: 15px;
-        }
-
-        /* JSON Editor */
-        .json-editor {
+            border-radius: 12px;
             margin: 15px;
+            overflow: hidden;
         }
 
         .json-header {
             background: #2B3139;
-            padding: 10px 15px;
-            border-radius: 8px 8px 0 0;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #3A3F4A;
+        }
+
+        .json-header span {
+            color: #F0B90B;
+            font-weight: 500;
+            font-size: 14px;
         }
 
         .action-buttons {
@@ -518,19 +517,31 @@
         }
 
         .action-btn {
-            background: #1E2329;
+            background: #2B3139;
             border: 1px solid #3A3F4A;
             color: #A6B0C2;
-            padding: 4px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .action-btn:hover {
             border-color: #F0B90B;
             color: #F0B90B;
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .json-content {
+            padding: 20px;
         }
 
         .json-content textarea {
@@ -538,132 +549,55 @@
             background: #2B3139;
             border: 1px solid #3A3F4A;
             color: #A6B0C2;
-            font-family: monospace;
+            font-family: 'Monaco', 'Menlo', monospace;
             font-size: 13px;
+            line-height: 1.5;
             padding: 15px;
-            border-radius: 0 0 8px 8px;
+            border-radius: 8px;
             resize: vertical;
             outline: none;
         }
 
         .json-content textarea:focus {
             border-color: #F0B90B;
+            box-shadow: 0 0 0 2px rgba(240, 185, 11, 0.2);
         }
 
         .response-preview {
             background: #2B3139;
-            border-left: 4px solid #F0B90B;
+            border-radius: 8px;
             padding: 15px;
             margin: 15px;
-            border-radius: 8px;
+            border-left: 3px solid #F0B90B;
             max-height: 200px;
             overflow-y: auto;
         }
 
         .response-preview pre {
             color: #A6B0C2;
-            font-family: monospace;
+            font-family: 'Monaco', 'Menlo', monospace;
             font-size: 12px;
+            overflow-x: auto;
             white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
-        /* WebSocket Messages */
-        .ws-messages {
-            background: #1E2329;
-            border: 1px solid #2B3139;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .ws-message {
-            padding: 10px;
-            border-bottom: 1px solid #2B3139;
-            font-family: monospace;
-            font-size: 12px;
-            animation: fadeIn 0.3s;
-        }
-
-        .ws-message:last-child { border-bottom: none; }
-
-        .ws-message .timestamp { color: #F0B90B; margin-right: 10px; }
-        .ws-message .type { color: #8B5CF6; margin-right: 10px; font-weight: 600; }
-        .ws-message .data { color: #0ECB81; }
-
-        /* Tables */
-        .data-table {
-            width: calc(100% - 30px);
-            margin: 15px;
-            border-collapse: collapse;
-            background: #1E2329;
-            border: 1px solid #2B3139;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .data-table th {
-            background: #2B3139;
-            color: #F0B90B;
-            font-weight: 600;
-            font-size: 12px;
-            padding: 12px;
-            text-align: left;
-        }
-
-        .data-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #2B3139;
-            color: #A6B0C2;
-            font-size: 13px;
-        }
-
-        .data-table tr:hover td {
-            background: #2B3139;
-        }
-
-        /* Grid Layouts */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        /* Ticker */
+        /* Market Ticker */
         .market-ticker {
             background: #1E2329;
             border: 1px solid #2B3139;
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .ticker-wrapper {
-            overflow: hidden;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            position: relative;
         }
 
         .ticker-items {
             display: inline-flex;
             gap: 20px;
             animation: tickerScroll 30s linear infinite;
-            white-space: nowrap;
         }
 
         .ticker-items:hover {
@@ -674,24 +608,135 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 8px 16px;
+            padding: 8px 15px;
             background: #2B3139;
-            border-radius: 30px;
+            border-radius: 20px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .ticker-item:hover {
             background: #3A3F4A;
+            transform: translateY(-2px);
         }
 
-        .ticker-symbol { color: #F0B90B; font-weight: 600; }
-        .ticker-price { color: #0ECB81; }
-        .ticker-change.positive { color: #0ECB81; }
-        .ticker-change.negative { color: #F6465D; }
+        .ticker-symbol {
+            color: #F0B90B;
+            font-weight: 600;
+        }
+
+        .ticker-price {
+            color: #0ECB81;
+        }
+
+        .ticker-change.positive {
+            color: #0ECB81;
+        }
+
+        .ticker-change.negative {
+            color: #F6465D;
+        }
+
+        @keyframes tickerScroll {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: #2B3139;
+            color: #F0B90B;
+            font-weight: 500;
+            font-size: 12px;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .data-table th:hover {
+            background: #3A3F4A;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #2B3139;
+            color: #A6B0C2;
+            font-size: 13px;
+        }
+
+        .data-table tr:hover {
+            background: #2B3139;
+        }
+
+        /* WebSocket Messages Panel */
+        .ws-messages {
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .ws-message {
+            padding: 10px;
+            border-bottom: 1px solid #2B3139;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            color: #A6B0C2;
+            animation: fadeIn 0.5s;
+        }
+
+        .ws-message:last-child {
+            border-bottom: none;
+        }
+
+        .ws-message .timestamp {
+            color: #F0B90B;
+            margin-right: 10px;
+        }
+
+        .ws-message .type {
+            color: #8B5CF6;
+            margin-right: 10px;
+            font-weight: 600;
+        }
+
+        .ws-message .data {
+            color: #0ECB81;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* Footer */
         .footer {
-            margin-top: 50px;
+            margin-top: 60px;
             padding: 30px;
             background: #1E2329;
             border: 1px solid #2B3139;
@@ -701,28 +746,19 @@
             font-size: 13px;
         }
 
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            cursor: help;
+        /* Loading Animation */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
-        .tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #F0B90B;
-            color: #0B0F1C;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            white-space: nowrap;
-            z-index: 1000;
-        }
-
-        /* Live Indicator */
         .live-indicator {
             display: inline-block;
             width: 8px;
@@ -733,186 +769,293 @@
             animation: pulse 2s infinite;
         }
 
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes tickerScroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #F0B90B;
+            color: #0B0F1C;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 1000;
         }
 
         /* Responsive */
         @media (max-width: 1200px) {
-            .trading-grid { grid-template-columns: 1fr; }
-            .grid-4 { grid-template-columns: repeat(2, 1fr); }
-        }
+            .trading-grid {
+                grid-template-columns: 1fr;
+            }
 
-        @media (max-width: 768px) {
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-            .ws-stats { margin-left: 0; width: 100%; }
+            .nav {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h1>🚀 UHF Trading Platform</h1>
-            <div class="subtitle">Complete API Documentation for Pakistan Stock Exchange (PSX)</div>
-            <div class="badge">Version 1.0 | All POST | Real-Time WebSocket</div>
+            <div class="subtitle">Complete API Documentation for Pakistan Stock Exchange (PSX) Integration</div>
+            <div class="badge">Version 1.0 | Real-Time WebSocket | Live Data Streams</div>
         </div>
 
-        <!-- WebSocket Status -->
+        <!-- WebSocket Status Bar -->
         <div class="ws-status">
             <div class="ws-indicator">
                 <div class="ws-led connected" id="wsLed"></div>
-                <span id="wsStatus">WEBSOCKET CONNECTED</span>
+                <span id="wsStatus">WebSocket Connected</span>
             </div>
-            <div class="ws-info">
-                Session: ws_uhf_20260216_001 | Market: PSX
+            <div class="ws-info" id="wsInfo">
+                Session ID: ws_uhf_20260216_001 | Connection Time: 11:30:00
             </div>
             <div class="ws-stats">
                 <div class="ws-stat">
-                    <div class="ws-stat-label">MSGS/SEC</div>
+                    <div class="ws-stat-label">Messages/sec</div>
                     <div class="ws-stat-value" id="msgRate">24</div>
                 </div>
                 <div class="ws-stat">
-                    <div class="ws-stat-label">LATENCY</div>
+                    <div class="ws-stat-label">Latency</div>
                     <div class="ws-stat-value" id="wsLatency">12ms</div>
                 </div>
-                <div class="ws-stat">
-                    <div class="ws-stat-label">SYMBOLS</div>
-                    <div class="ws-stat-value">540</div>
-                </div>
             </div>
-        </div>
-
-        <!-- WebSocket Controls -->
-        <div class="ws-controls">
-            <button class="ws-btn connect" onclick="connectWebSocket()">🔌 Connect</button>
-            <button class="ws-btn disconnect" onclick="disconnectWebSocket()">⚡ Disconnect</button>
-            <button class="ws-btn subscribe" onclick="subscribeMarket()">📡 Market Data</button>
-            <button class="ws-btn orders" onclick="subscribeOrders()">📦 Order Updates</button>
-            <button class="ws-btn clear" onclick="clearMessages()">🗑️ Clear</button>
         </div>
 
         <!-- Navigation -->
         <div class="nav">
-            <a href="#market" onclick="scrollToSection('market')" class="active">Market Data</a>
-            <a href="#segments" onclick="scrollToSection('segments')">Segments</a>
-            <a href="#realtime" onclick="scrollToSection('realtime')">Real-Time JSON</a>
-            <a href="#symbol" onclick="scrollToSection('symbol')">Symbol Detail</a>
-            <a href="#trading" onclick="scrollToSection('trading')">Trading</a>
-            <a href="#account" onclick="scrollToSection('account')">Account</a>
-            <a href="#rms" onclick="scrollToSection('rms')">RMS</a>
-            <a href="#overview" onclick="scrollToSection('overview')">Overview</a>
-            <a href="#websocket" onclick="scrollToSection('websocket')">WebSocket</a>
+            <a href="#market" class="active">Market Data</a>
+            <a href="#symbol">Symbol Detail</a>
+            <a href="#trading">Trading</a>
+            <a href="#account">Account</a>
+            <a href="#rms">Risk Management</a>
+            <a href="#market-overview">Market Overview</a>
+            <a href="#websocket">WebSocket Console</a>
         </div>
 
-        <!-- Live Ticker -->
+        <!-- Live Market Ticker -->
         <div class="market-ticker">
-            <div class="ticker-wrapper">
-                <div class="ticker-items" id="marketTicker"></div>
+            <div class="ticker-items" id="marketTicker">
+                <!-- Dynamic ticker items will be inserted here -->
+            </div>
+        </div>
+
+        <!-- WebSocket Connection Section -->
+        <div class="section-header" id="websocket">
+            <h2>🔌 WebSocket Connection</h2>
+            <div class="version">Live Data Stream</div>
+        </div>
+
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <span class="method ws">WS</span>
+                <span class="endpoint-url">wss://api.uhf.com.pk/ws/v1</span>
+                <span class="endpoint-desc">Real-Time WebSocket Stream</span>
+            </div>
+
+            <!-- Connection Controls -->
+            <div style="padding: 20px; display: flex; gap: 15px; flex-wrap: wrap; border-bottom: 1px solid #2B3139;">
+                <button class="action-btn" onclick="connectWebSocket()"
+                    style="background: #0ECB81; color: #0B0F1C; border: none; padding: 10px 20px;">
+                    🔌 Connect WebSocket
+                </button>
+                <button class="action-btn" onclick="disconnectWebSocket()"
+                    style="background: #F6465D; color: white; border: none; padding: 10px 20px;">
+                    ⚡ Disconnect
+                </button>
+                <button class="action-btn" onclick="subscribeMarket()"
+                    style="background: #F0B90B; color: #0B0F1C; border: none; padding: 10px 20px;">
+                    📡 Subscribe Market
+                </button>
+                <button class="action-btn" onclick="subscribeOrders()"
+                    style="background: #8B5CF6; color: white; border: none; padding: 10px 20px;">
+                    📦 Subscribe Orders
+                </button>
+            </div>
+
+            <div class="json-editor">
+                <div class="json-header">
+                    <span>📤 WebSocket Subscription Request</span>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="resetToDefault('ws-subscribe')">⟲ Reset</button>
+                        <button class="action-btn" onclick="copyToClipboard('ws-subscribe')">📋 Copy</button>
+                        <button class="action-btn" onclick="sendWebSocketMessage()">📨 Send</button>
+                    </div>
+                </div>
+                <div class="json-content">
+                    <textarea id="ws-subscribe" rows="12">{
+  "action": "subscribe",
+  "request_id": "sub_" + Date.now(),
+  "channels": {
+    "market": {
+      "symbols": ["PSO", "HUBC", "MARI", "SYS"],
+      "types": ["trade", "quote", "depth", "ohlc"]
+    },
+    "orders": {
+      "accounts": ["A12345678"],
+      "types": ["new", "fill", "cancel", "reject"]
+    }
+  },
+  "depth_levels": 10,
+  "snapshot": true
+}</textarea>
+                </div>
+            </div>
+
+            <!-- WebSocket Messages Console -->
+            <div class="ws-messages" id="wsMessages">
+                <div class="ws-message">
+                    <span class="timestamp">[11:30:00]</span>
+                    <span class="type">SYSTEM</span>
+                    <span class="data">WebSocket connected successfully</span>
+                </div>
+                <div class="ws-message">
+                    <span class="timestamp">[11:30:01]</span>
+                    <span class="type">SUBSCRIBE</span>
+                    <span class="data">Subscribed to market data for PSO, HUBC, MARI</span>
+                </div>
+                <div class="ws-message">
+                    <span class="timestamp">[11:30:02]</span>
+                    <span class="type">TRADE</span>
+                    <span class="data">PSO: 186.45 (1,000 shares)</span>
+                </div>
+                <div class="ws-message">
+                    <span class="timestamp">[11:30:03]</span>
+                    <span class="type">QUOTE</span>
+                    <span class="data">PSO Bid: 186.40 (5,000) | Ask: 186.45 (3,500)</span>
+                </div>
+                <div class="ws-message">
+                    <span class="timestamp">[11:30:04]</span>
+                    <span class="type">DEPTH</span>
+                    <span class="data">PSO Depth: +12 levels updated</span>
+                </div>
+                <div class="ws-message">
+                    <span class="timestamp">[11:30:05]</span>
+                    <span class="type">ORDER</span>
+                    <span class="data">Order ORD1234567890 filled: 300 @ 186.40</span>
+                </div>
             </div>
         </div>
 
         <!-- Market Data Section -->
         <div class="section-header" id="market">
-            <h2>📊 Market Data</h2>
-            <div class="version">Live Trading View</div>
+            <h2>📊 Real-Time Market Data</h2>
+            <div class="version">WebSocket + POST</div>
         </div>
 
-        <!-- Trading Grid -->
+        <!-- Trading View Grid - Binance Style -->
         <div class="trading-grid">
-            <!-- Chart -->
+            <!-- Chart Column -->
             <div class="chart-container">
                 <div class="chart-header">
                     <div class="symbol-info">
-                        <span class="symbol-name">PSO</span>
+                        <span class="symbol-name">PSO / PKR</span>
                         <span class="current-price" id="currentPrice">186.45</span>
                         <span class="price-change positive" id="priceChange">+1.45 (0.78%)</span>
                     </div>
                     <div class="interval-selector">
-                        <button class="interval-btn" onclick="changeInterval('1m', this)">1m</button>
-                        <button class="interval-btn" onclick="changeInterval('5m', this)">5m</button>
-                        <button class="interval-btn" onclick="changeInterval('15m', this)">15m</button>
-                        <button class="interval-btn" onclick="changeInterval('30m', this)">30m</button>
-                        <button class="interval-btn" onclick="changeInterval('1h', this)">1h</button>
-                        <button class="interval-btn active" onclick="changeInterval('1d', this)">1d</button>
-                        <button class="interval-btn" onclick="changeInterval('1w', this)">1w</button>
+                        <button class="interval-btn" onclick="changeInterval('1m')">1m</button>
+                        <button class="interval-btn" onclick="changeInterval('5m')">5m</button>
+                        <button class="interval-btn" onclick="changeInterval('15m')">15m</button>
+                        <button class="interval-btn" onclick="changeInterval('30m')">30m</button>
+                        <button class="interval-btn" onclick="changeInterval('1h')">1h</button>
+                        <button class="interval-btn" onclick="changeInterval('4h')">4h</button>
+                        <button class="interval-btn active" onclick="changeInterval('1d')">1d</button>
+                        <button class="interval-btn" onclick="changeInterval('1w')">1w</button>
                     </div>
                 </div>
-                <div class="chart-area" id="chartArea">
+
+                <!-- Chart Area -->
+                <div class="chart-area">
                     <div class="candles" id="candleChart"></div>
                 </div>
+
+                <!-- Volume Bars -->
                 <div class="volume-bars" id="volumeBars"></div>
-                <div style="display: flex; justify-content: space-between; margin-top: 15px; color: #A6B0C2; font-size: 13px;">
-                    <div>O: 185.00 | H: 187.50 | L: 184.80 | C: 186.45</div>
-                    <div>VWAP: 186.12 | Trades: 3,245</div>
+
+                <!-- Chart Controls -->
+                <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                    <div>
+                        <span class="tooltip" data-tooltip="Open: 185.00">O: 185.00</span> |
+                        <span class="tooltip" data-tooltip="High: 187.50">H: 187.50</span> |
+                        <span class="tooltip" data-tooltip="Low: 184.80">L: 184.80</span> |
+                        <span class="tooltip" data-tooltip="Close: 186.45">C: 186.45</span>
+                    </div>
+                    <div>
+                        <span>VWAP: 186.12</span> |
+                        <span>Trades: 3,245</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Order Book -->
+            <!-- Order Book Column -->
             <div class="order-book">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                    <span style="color: #F0B90B; font-size: 18px;">Order Book</span>
-                    <span style="color: #A6B0C2;"><span class="live-indicator"></span>LIVE</span>
+                    <span style="color: #F0B90B;">Order Book</span>
+                    <span style="color: #A6B0C2;">PSO <span class="live-indicator"></span>LIVE</span>
                 </div>
+
                 <div class="order-book-header">
                     <span>Price (PKR)</span>
                     <span>Size</span>
                     <span>Total</span>
                 </div>
+
+                <!-- Asks (Sell Orders) -->
                 <div class="order-book-asks" id="orderBookAsks"></div>
-                <div style="text-align: center; padding: 10px; color: #F0B90B; font-size: 12px; background: #2B3139; border-radius: 8px; margin: 10px 0;">
+
+                <!-- Spread -->
+                <div
+                    style="text-align: center; padding: 10px; color: #F0B90B; font-size: 12px; border-bottom: 1px solid #2B3139; border-top: 1px solid #2B3139;">
                     Spread: 0.05 (0.027%)
                 </div>
+
+                <!-- Bids (Buy Orders) -->
                 <div class="order-book-bids" id="orderBookBids"></div>
+
+                <!-- Market Stats -->
                 <div class="order-book-stats">
-                    <div class="stat-row"><span>24h High</span><span class="stat-value" id="high24h">187.50</span></div>
-                    <div class="stat-row"><span>24h Low</span><span class="stat-value" id="low24h">184.80</span></div>
-                    <div class="stat-row"><span>Volume</span><span class="stat-value" id="volume24h">2.45M</span></div>
-                    <div class="stat-row"><span>Turnover</span><span class="stat-value" id="turnover">456.2M</span></div>
+                    <div class="stat-row">
+                        <span>24h High</span>
+                        <span class="stat-value" id="high24h">187.50</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>24h Low</span>
+                        <span class="stat-value" id="low24h">184.80</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>24h Volume</span>
+                        <span class="stat-value" id="volume24h">2.45M</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Turnover</span>
+                        <span class="stat-value" id="turnover">456.2M</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>VWAP</span>
+                        <span class="stat-value" id="vwap">186.12</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Trades</span>
+                        <span class="stat-value" id="trades">3,245</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Market Segments -->
-        <div class="section-header" id="segments">
-            <h2>🏷️ Market Segments</h2>
-            <div class="version">PSX Full Coverage</div>
-        </div>
-
-        <div class="market-segments">
-            <div class="segment-card"><div class="name">REGULAR</div><div class="desc">Main Board • 450+</div></div>
-            <div class="segment-card"><div class="name">ODD LOT</div><div class="desc">Fractional • 500+</div></div>
-            <div class="segment-card"><div class="name">FUTURES</div><div class="desc">Deliverable • 50+</div></div>
-            <div class="segment-card"><div class="name">ETFs</div><div class="desc">12 Funds</div></div>
-            <div class="segment-card"><div class="name">INDICES</div><div class="desc">KSE100, KSE30</div></div>
-            <div class="segment-card"><div class="name">ISLAMIC</div><div class="desc">KMI-30</div></div>
-            <div class="segment-card"><div class="name">SECTOR</div><div class="desc">Oil, Bank, Cement</div></div>
-        </div>
-
-        <!-- Real-Time Market Data JSON -->
-        <div class="section-header" id="realtime">
-            <h2>⚡ Real-Time JSON APIs</h2>
-            <div class="version">10 Endpoints</div>
-        </div>
-
-        <div class="grid-2">
+        <!-- Market Data Endpoints -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
             <!-- Last Trade -->
             <div class="endpoint-card">
                 <div class="endpoint-header">
@@ -921,16 +1064,17 @@
                 </div>
                 <div class="json-editor">
                     <div class="json-header">
-                        <span>Request</span>
+                        <span>📤 Last Trade Request</span>
                         <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('last-trade')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('last-trade')">Copy</button>
+                            <button class="action-btn" onclick="resetToDefault('last-trade')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('last-trade')">📋 Copy</button>
                         </div>
                     </div>
                     <div class="json-content">
-                        <textarea id="last-trade">{
+                        <textarea id="last-trade" rows="6">{
   "symbol": "PSO",
-  "market": "REGULAR"
+  "market": "REGULAR",
+  "timestamp": "2026-02-16T11:35:00+05:00"
 }</textarea>
                     </div>
                     <div class="response-preview">
@@ -940,44 +1084,13 @@
   "size": 1000,
   "time": "11:35:22",
   "change": 1.45,
-  "percent": 0.78
+  "change_percent": 0.78
 }</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- Quote -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/quote</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('quote')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('quote')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="quote">{
-  "symbol": "PSO"
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>{
-  "bid": {"price": 186.40, "size": 5000},
-  "ask": {"price": 186.45, "size": 3500},
-  "spread": 0.05
-}</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <!-- Depth -->
+            <!-- Market Depth -->
             <div class="endpoint-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -985,248 +1098,24 @@
                 </div>
                 <div class="json-editor">
                     <div class="json-header">
-                        <span>Request</span>
+                        <span>📤 Market Depth Request</span>
                         <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('depth')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('depth')">Copy</button>
+                            <button class="action-btn" onclick="resetToDefault('market-depth')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('market-depth')">📋 Copy</button>
                         </div>
                     </div>
                     <div class="json-content">
-                        <textarea id="depth">{
+                        <textarea id="market-depth" rows="6">{
   "symbol": "PSO",
-  "levels": 10
+  "levels": 10,
+  "timestamp": "2026-02-16T11:35:00+05:00"
 }</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>{
-  "bids": [
-    {"price": 186.40, "size": 5000},
-    {"price": 186.35, "size": 7500}
-  ],
-  "asks": [
-    {"price": 186.45, "size": 3500},
-    {"price": 186.50, "size": 6800}
-  ]
-}</pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Snapshot -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/snapshot</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('snapshot')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('snapshot')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="snapshot">{
-  "symbol": "PSO"
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>{
-  "open": 185.00,
-  "high": 187.50,
-  "low": 184.80,
-  "last": 186.45,
-  "volume": 2450000,
-  "vwap": 186.12
-}</pre>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="grid-2">
-            <!-- Klines -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/klines</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('klines')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('klines')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="klines">{
-  "symbol": "PSO",
-  "interval": "5m",
-  "limit": 100
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>[
-  {"time": "11:25", "open": 186.20, "high": 186.45, "low": 186.15, "close": 186.40, "volume": 125000},
-  {"time": "11:30", "open": 186.40, "high": 186.50, "low": 186.35, "close": 186.45, "volume": 98000}
-]</pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Movers -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/movers</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('movers')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('movers')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="movers">{
-  "type": "gainers",
-  "limit": 10
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>[
-  {"symbol": "MARI", "price": 2450.00, "change": 85.50, "percent": 3.62},
-  {"symbol": "SYS", "price": 380.50, "change": 12.75, "percent": 3.47}
-]</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <!-- Indices -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/indices</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('indices')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('indices')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="indices">{
-  "indices": ["KSE100", "KSE30"]
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>[
-  {"index": "KSE100", "value": 78945.32, "change": 567.89, "percent": 0.72},
-  {"index": "KSE30", "value": 45678.90, "change": 234.56, "percent": 0.52}
-]</pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sectors -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/sectors</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('sectors')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('sectors')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="sectors">{
-  "sectors": ["OILGAS", "BANK"]
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>[
-  {"sector": "OILGAS", "value": 15432.50, "change": 123.45, "percent": 0.81},
-  {"sector": "BANK", "value": 23456.78, "change": -123.45, "percent": -0.52}
-]</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <!-- Futures -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/futures</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('futures')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('futures')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="futures">{
-  "symbol": "PSO"
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>{
-  "futures": [
-    {"contract": "FEB", "price": 187.20, "oi": 45000},
-    {"contract": "MAR", "price": 188.10, "oi": 32000}
-  ]
-}</pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ETFs -->
-            <div class="endpoint-card">
-                <div class="endpoint-header">
-                    <span class="method">POST</span>
-                    <span class="endpoint-url">/api/v1/market/etfs</span>
-                </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="resetToDefault('etfs')">Reset</button>
-                            <button class="action-btn" onclick="copyToClipboard('etfs')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea id="etfs">{
-  "symbol": "KSE100ETF"
-}</textarea>
-                    </div>
-                    <div class="response-preview">
-                        <pre>{
-  "price": 125.50,
-  "nav": 124.80,
-  "premium": 0.70,
-  "volume": 250000
-}</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Symbol Detail -->
+        <!-- Symbol Detail Section -->
         <div class="section-header" id="symbol">
             <h2>📈 Symbol Detail</h2>
             <div class="version">POST /api/v1/market/symbol</div>
@@ -1236,147 +1125,385 @@
             <div class="endpoint-header">
                 <span class="method">POST</span>
                 <span class="endpoint-url">/api/v1/market/symbol</span>
+                <span class="endpoint-desc">Complete Symbol Information</span>
             </div>
             <div class="json-editor">
                 <div class="json-header">
-                    <span>Request</span>
+                    <span>📤 Symbol Detail Request</span>
                     <div class="action-buttons">
-                        <button class="action-btn" onclick="resetToDefault('symbol-detail')">Reset</button>
-                        <button class="action-btn" onclick="copyToClipboard('symbol-detail')">Copy</button>
+                        <button class="action-btn" onclick="resetToDefault('symbol-detail')">⟲ Reset</button>
+                        <button class="action-btn" onclick="copyToClipboard('symbol-detail')">📋 Copy</button>
                     </div>
                 </div>
                 <div class="json-content">
-                    <textarea id="symbol-detail">{
+                    <textarea id="symbol-detail" rows="10">{
   "symbol": "PSO",
-  "include": ["indicators", "fundamentals"]
+  "include": {
+    "real_time": true,
+    "depth": true,
+    "indicators": true,
+    "fundamentals": true,
+    "corporate_actions": true
+  },
+  "depth_levels": 10,
+  "timestamp": "2026-02-16T11:35:00+05:00"
 }</textarea>
                 </div>
             </div>
 
-            <table class="data-table">
-                <tr><th>Indicator</th><th>Value</th><th>Signal</th></tr>
-                <tr><td>RSI (14)</td><td>58.5</td><td style="color: #F0B90B;">NEUTRAL</td></tr>
-                <tr><td>MACD</td><td>1.15 / 0.95</td><td style="color: #0ECB81;">BULLISH</td></tr>
-                <tr><td>SMA 20</td><td>185.20</td><td style="color: #0ECB81;">ABOVE</td></tr>
-                <tr><td>Bollinger Bands</td><td>188.50 / 185.20 / 181.90</td><td style="color: #F0B90B;">MIDDLE</td></tr>
+            <!-- Technical Indicators -->
+            <table class="data-table" style="margin: 20px;">
+                <tr>
+                    <th>Indicator</th>
+                    <th>Value</th>
+                    <th>Signal</th>
+                    <th>Updated</th>
+                </tr>
+                <tr>
+                    <td>RSI (14)</td>
+                    <td>58.5</td>
+                    <td style="color: #F0B90B;">NEUTRAL</td>
+                    <td>11:35:22</td>
+                </tr>
+                <tr>
+                    <td>MACD</td>
+                    <td>1.15 / 0.95</td>
+                    <td style="color: #0ECB81;">BULLISH</td>
+                    <td>11:35:22</td>
+                </tr>
+                <tr>
+                    <td>SMA 20</td>
+                    <td>185.20</td>
+                    <td style="color: #0ECB81;">ABOVE</td>
+                    <td>11:35:22</td>
+                </tr>
+                <tr>
+                    <td>SMA 50</td>
+                    <td>183.50</td>
+                    <td style="color: #0ECB81;">ABOVE</td>
+                    <td>11:35:22</td>
+                </tr>
+                <tr>
+                    <td>Bollinger Bands</td>
+                    <td>188.50 / 185.20 / 181.90</td>
+                    <td style="color: #F0B90B;">MIDDLE</td>
+                    <td>11:35:22</td>
+                </tr>
+                <tr>
+                    <td>ATR (14)</td>
+                    <td>2.85</td>
+                    <td>-</td>
+                    <td>11:35:22</td>
+                </tr>
+            </table>
+
+            <!-- Fundamentals -->
+            <table class="data-table" style="margin: 20px;">
+                <tr>
+                    <th>Fundamental</th>
+                    <th>Value</th>
+                    <th>Updated</th>
+                </tr>
+                <tr>
+                    <td>Market Cap</td>
+                    <td>285,000,000,000 PKR</td>
+                    <td>2026-02-16</td>
+                </tr>
+                <tr>
+                    <td>P/E Ratio</td>
+                    <td>7.22</td>
+                    <td>2026-02-16</td>
+                </tr>
+                <tr>
+                    <td>EPS (TTM)</td>
+                    <td>25.80</td>
+                    <td>2026-02-16</td>
+                </tr>
+                <tr>
+                    <td>Dividend Yield</td>
+                    <td>4.8%</td>
+                    <td>2026-02-16</td>
+                </tr>
+                <tr>
+                    <td>Beta</td>
+                    <td>0.82</td>
+                    <td>2026-02-16</td>
+                </tr>
             </table>
         </div>
 
-        <!-- Trading APIs -->
+        <!-- Trading Section -->
         <div class="section-header" id="trading">
             <h2>🔄 Trading APIs</h2>
-            <div class="version">All POST</div>
+            <div class="version">All Endpoints POST</div>
         </div>
 
-        <div class="grid-4">
+        <!-- Order Types Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <!-- Limit Order -->
             <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/order/limit</span></div>
-                <div class="json-content"><textarea rows="5">{
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/order</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Limit Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-limit')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-limit')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-limit" rows="10">{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
   "symbol": "PSO",
   "side": "BUY",
-  "qty": 1000,
-  "price": 186.40
-}</textarea></div>
-            </div>
-            <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/order/market</span></div>
-                <div class="json-content"><textarea rows="5">{
-  "symbol": "PSO",
-  "side": "SELL",
-  "qty": 500
-}</textarea></div>
-            </div>
-            <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/order/stop</span></div>
-                <div class="json-content"><textarea rows="5">{
-  "symbol": "PSO",
-  "side": "SELL",
-  "qty": 1000,
-  "stop": 184.50
-}</textarea></div>
-            </div>
-            <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/order/fok</span></div>
-                <div class="json-content"><textarea rows="5">{
-  "symbol": "PSO",
-  "side": "BUY",
-  "qty": 10000,
-  "price": 186.40
-}</textarea></div>
-            </div>
-        </div>
-
-        <!-- WebSocket Console -->
-        <div class="section-header" id="websocket">
-            <h2>🔌 WebSocket Console</h2>
-            <div class="version">Live Stream</div>
-        </div>
-
-        <div class="endpoint-card">
-            <div class="endpoint-header">
-                <span class="method ws">WS</span>
-                <span class="endpoint-url">wss://api.uhf.com.pk/ws/v1</span>
-            </div>
-            <div class="json-editor">
-                <div class="json-header">
-                    <span>Subscribe</span>
-                    <div class="action-buttons">
-                        <button class="action-btn" onclick="resetToDefault('ws-subscribe')">Reset</button>
-                        <button class="action-btn" onclick="copyToClipboard('ws-subscribe')">Copy</button>
-                        <button class="action-btn" onclick="sendWebSocketMessage()">Send</button>
+  "order_type": "LIMIT",
+  "quantity": 1000,
+  "price": 186.40,
+  "time_in_force": "DAY"
+}</textarea>
+                    </div>
+                    <div class="response-preview">
+                        <pre>{
+  "order_id": "ORD1234567890",
+  "status": "ACCEPTED",
+  "received_at": "11:36:00"
+}</pre>
                     </div>
                 </div>
-                <div class="json-content">
-                    <textarea id="ws-subscribe">{
-  "action": "subscribe",
-  "market": ["PSO", "HUBC", "KSE100"],
-  "types": ["trade", "quote"]
+            </div>
+
+            <!-- Market Order -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/order</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Market Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-market')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-market')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-market" rows="10">{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "SELL",
+  "order_type": "MARKET",
+  "quantity": 500,
+  "time_in_force": "IOC"
 }</textarea>
+                    </div>
                 </div>
             </div>
-            <div class="ws-messages" id="wsMessages">
-                <div class="ws-message"><span class="timestamp">[11:30:00]</span><span class="type">SYSTEM</span><span class="data">Connected</span></div>
-                <div class="ws-message"><span class="timestamp">[11:30:01]</span><span class="type">SUBSCRIBE</span><span class="data">PSO, HUBC, KSE100</span></div>
-                <div class="ws-message"><span class="timestamp">[11:30:02]</span><span class="type">TRADE</span><span class="data">PSO: 186.45 (1,000)</span></div>
-                <div class="ws-message"><span class="timestamp">[11:30:03]</span><span class="type">QUOTE</span><span class="data">PSO Bid: 186.40 Ask: 186.45</span></div>
-            </div>
-        </div>
 
-        <!-- Account Section -->
-        <div class="section-header" id="account">
-            <h2>👤 Account</h2>
-            <div class="version">POST /api/v1/account</div>
-        </div>
-
-        <div class="grid-2">
+            <!-- Stop Loss -->
             <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/account/summary</span></div>
-                <div class="json-content"><textarea rows="5">{
-  "account": "A12345678"
-}</textarea></div>
-                <div style="padding: 15px;">
-                    <div class="stat-row"><span>Balance</span><span class="stat-value">2,500,000 PKR</span></div>
-                    <div class="stat-row"><span>Buying Power</span><span class="stat-value">2,100,000 PKR</span></div>
-                    <div class="stat-row"><span>Portfolio</span><span class="stat-value">8,450,000 PKR</span></div>
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/order</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Stop Loss Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-stop')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-stop')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-stop" rows="10">{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "SELL",
+  "order_type": "STOP_LOSS",
+  "quantity": 1000,
+  "stop_price": 184.50
+}</textarea>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Second Row of Orders -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+            <!-- FOK Order -->
             <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/account/holdings</span></div>
-                <div class="json-content"><textarea rows="5">{
-  "account": "A12345678"
-}</textarea></div>
-                <table class="data-table">
-                    <tr><th>Symbol</th><th>Qty</th><th>Avg</th><th>P&L</th></tr>
-                    <tr><td>PSO</td><td>5,000</td><td>182.50</td><td style="color: #0ECB81;">+19,750</td></tr>
-                    <tr><td>HUBC</td><td>10,000</td><td>108.50</td><td style="color: #0ECB81;">+39,500</td></tr>
-                </table>
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/order</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 FOK Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-fok')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-fok')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-fok" rows="10">{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "BUY",
+  "order_type": "FOK",
+  "quantity": 10000,
+  "price": 186.40
+}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IOC Order -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/order</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 IOC Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-ioc')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-ioc')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-ioc" rows="10">{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "BUY",
+  "order_type": "IOC",
+  "quantity": 5000,
+  "price": 186.45
+}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Modify -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/modify</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Modify Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-modify')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-modify')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-modify" rows="8">{
+  "order_id": "ORD1234567890",
+  "price": 186.50,
+  "quantity": 800
+}</textarea>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Risk Management -->
+        <!-- Order Management -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+            <!-- Cancel Order -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/cancel</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Cancel Order</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-cancel')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-cancel')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-cancel" rows="5">{
+  "order_id": "ORD1234567892"
+}</textarea>
+                    </div>
+                    <div class="response-preview">
+                        <pre>{
+  "status": "CANCELLED",
+  "cancelled_at": "11:42:00"
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order History -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/history</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Order History</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('order-history')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('order-history')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="order-history" rows="8">{
+  "account": "A12345678",
+  "from_date": "2026-02-01",
+  "to_date": "2026-02-16",
+  "symbol": "PSO",
+  "status": ["FILLED", "PARTIALLY_FILLED"]
+}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trade Confirmation -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/trade/confirmation</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Trade Confirmation</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('trade-confirm')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('trade-confirm')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="trade-confirm" rows="5">{
+  "execution_id": "EXEC20260216001"
+}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Management Section -->
         <div class="section-header" id="rms">
-            <h2>🛡️ Risk Management</h2>
-            <div class="version">POST /api/v1/rms</div>
+            <h2>🛡️ Risk Management (RMS)</h2>
+            <div class="version">Pre-Trade Validation</div>
         </div>
 
         <div class="endpoint-card">
@@ -1386,22 +1513,29 @@
             </div>
             <div class="json-editor">
                 <div class="json-header">
-                    <span>Request</span>
+                    <span>📤 RMS Validation Request</span>
                     <div class="action-buttons">
-                        <button class="action-btn" onclick="resetToDefault('rms')">Reset</button>
-                        <button class="action-btn" onclick="copyToClipboard('rms')">Copy</button>
+                        <button class="action-btn" onclick="resetToDefault('rms-validate')">⟲ Reset</button>
+                        <button class="action-btn" onclick="copyToClipboard('rms-validate')">📋 Copy</button>
                     </div>
                 </div>
                 <div class="json-content">
-                    <textarea id="rms">{
+                    <textarea id="rms-validate" rows="10">{
   "account": "A12345678",
   "order": {
     "symbol": "PSO",
     "side": "BUY",
-    "qty": 10000,
+    "quantity": 10000,
     "price": 186.40,
-    "value": 1864000
-  }
+    "value": 1864000.00
+  },
+  "checks": [
+    "buying_power",
+    "margin",
+    "position_limit",
+    "price_band",
+    "circuit_breaker"
+  ]
 }</textarea>
                 </div>
                 <div class="response-preview">
@@ -1409,34 +1543,289 @@
   "status": "APPROVED",
   "buying_power": {
     "required": 1864000,
-    "available": 2500000
+    "available": 2500000,
+    "remaining": 636000
   }
 }</pre>
                 </div>
             </div>
         </div>
 
-        <!-- Market Overview -->
-        <div class="section-header" id="overview">
-            <h2>📊 Market Overview</h2>
-            <div class="version">Real-Time</div>
+        <!-- Account Section -->
+        <div class="section-header" id="account">
+            <h2>👤 Account Portfolio</h2>
+            <div class="version">POST /api/v1/account</div>
         </div>
 
-        <div class="grid-2">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <!-- Account Summary -->
             <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/market/gainers</span></div>
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/account/summary</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Account Summary</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('account-summary')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('account-summary')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="account-summary" rows="5">{
+  "account": "A12345678",
+  "include": ["funds", "positions", "exposure"]
+}</textarea>
+                    </div>
+                </div>
+
+                <!-- Account Stats -->
+                <div style="padding: 20px;">
+                    <div class="stat-row">
+                        <span>Cash Balance</span>
+                        <span class="stat-value">2,500,000 PKR</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Buying Power</span>
+                        <span class="stat-value">2,100,000 PKR</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Portfolio Value</span>
+                        <span class="stat-value">8,450,000 PKR</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Unrealized P&L</span>
+                        <span class="stat-value" style="color: #0ECB81;">+250,000 PKR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Holdings -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/account/holdings</span>
+                </div>
+                <div class="json-editor">
+                    <div class="json-header">
+                        <span>📤 Holdings Request</span>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="resetToDefault('account-holdings')">⟲ Reset</button>
+                            <button class="action-btn" onclick="copyToClipboard('account-holdings')">📋 Copy</button>
+                        </div>
+                    </div>
+                    <div class="json-content">
+                        <textarea id="account-holdings" rows="5">{
+  "account": "A12345678",
+  "include_pnl": true
+}</textarea>
+                    </div>
+                </div>
+
+                <!-- Holdings Table -->
+                <table class="data-table" style="margin: 20px;">
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Quantity</th>
+                        <th>Avg Price</th>
+                        <th>Current</th>
+                        <th>P&L</th>
+                    </tr>
+                    <tr>
+                        <td>PSO</td>
+                        <td>5,000</td>
+                        <td>182.50</td>
+                        <td style="color: #0ECB81;">186.45</td>
+                        <td style="color: #0ECB81;">+19,750</td>
+                    </tr>
+                    <tr>
+                        <td>HUBC</td>
+                        <td>10,000</td>
+                        <td>108.50</td>
+                        <td style="color: #0ECB81;">112.45</td>
+                        <td style="color: #0ECB81;">+39,500</td>
+                    </tr>
+                    <tr>
+                        <td>MARI</td>
+                        <td>500</td>
+                        <td>2,350.00</td>
+                        <td style="color: #0ECB81;">2,450.00</td>
+                        <td style="color: #0ECB81;">+50,000</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Market Overview Section -->
+        <div class="section-header" id="market-overview">
+            <h2>📊 Market Overview</h2>
+            <div class="version">Real-Time Market Data</div>
+        </div>
+
+        <!-- Top Gainers/Losers Grid -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <!-- Top Gainers -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/market/gainers</span>
+                </div>
                 <table class="data-table">
-                    <tr><th>Symbol</th><th>Price</th><th>Change</th></tr>
-                    <tr><td>MARI</td><td>2,450</td><td style="color: #0ECB81;">+3.62%</td></tr>
-                    <tr><td>SYS</td><td>380.50</td><td style="color: #0ECB81;">+3.47%</td></tr>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>Change</th>
+                        <th>%</th>
+                        <th>Volume</th>
+                    </tr>
+                    <tr>
+                        <td>MARI</td>
+                        <td>2,450.00</td>
+                        <td style="color: #0ECB81;">+85.50</td>
+                        <td style="color: #0ECB81;">+3.62%</td>
+                        <td>35,000</td>
+                    </tr>
+                    <tr>
+                        <td>SYS</td>
+                        <td>380.50</td>
+                        <td style="color: #0ECB81;">+12.75</td>
+                        <td style="color: #0ECB81;">+3.47%</td>
+                        <td>280,000</td>
+                    </tr>
+                    <tr>
+                        <td>FFC</td>
+                        <td>145.20</td>
+                        <td style="color: #0ECB81;">+4.80</td>
+                        <td style="color: #0ECB81;">+3.42%</td>
+                        <td>450,000</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Top Losers -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/market/losers</span>
+                </div>
+                <table class="data-table">
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>Change</th>
+                        <th>%</th>
+                        <th>Volume</th>
+                    </tr>
+                    <tr>
+                        <td>UBL</td>
+                        <td>210.30</td>
+                        <td style="color: #F6465D;">-5.20</td>
+                        <td style="color: #F6465D;">-2.41%</td>
+                        <td>320,000</td>
+                    </tr>
+                    <tr>
+                        <td>HBL</td>
+                        <td>115.40</td>
+                        <td style="color: #F6465D;">-2.10</td>
+                        <td style="color: #F6465D;">-1.79%</td>
+                        <td>550,000</td>
+                    </tr>
+                    <tr>
+                        <td>MCB</td>
+                        <td>185.20</td>
+                        <td style="color: #F6465D;">-2.80</td>
+                        <td style="color: #F6465D;">-1.49%</td>
+                        <td>280,000</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Most Active -->
+        <div class="endpoint-card" style="margin-top: 20px;">
+            <div class="endpoint-header">
+                <span class="method">POST</span>
+                <span class="endpoint-url">/api/v1/market/most-active</span>
+            </div>
+            <table class="data-table">
+                <tr>
+                    <th>Symbol</th>
+                    <th>Price</th>
+                    <th>Volume</th>
+                    <th>Value (PKR)</th>
+                    <th>Change</th>
+                </tr>
+                <tr>
+                    <td>HUBC</td>
+                    <td>112.45</td>
+                    <td>2,450,000</td>
+                    <td>275,000,000</td>
+                    <td style="color: #0ECB81;">+1.12%</td>
+                </tr>
+                <tr>
+                    <td>PSO</td>
+                    <td>186.45</td>
+                    <td>2,100,000</td>
+                    <td>391,545,000</td>
+                    <td style="color: #0ECB81;">+0.78%</td>
+                </tr>
+                <tr>
+                    <td>FFC</td>
+                    <td>145.20</td>
+                    <td>1,850,000</td>
+                    <td>268,620,000</td>
+                    <td style="color: #0ECB81;">+3.42%</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 52 Week High/Low -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/market/52week-high</span>
+                </div>
+                <table class="data-table">
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>52W High</th>
+                        <th>% From High</th>
+                    </tr>
+                    <tr>
+                        <td>MARI</td>
+                        <td>2,450</td>
+                        <td>2,460</td>
+                        <td>0.4%</td>
+                    </tr>
+                    <tr>
+                        <td>SYS</td>
+                        <td>380.50</td>
+                        <td>385.00</td>
+                        <td>1.2%</td>
+                    </tr>
                 </table>
             </div>
             <div class="endpoint-card">
-                <div class="endpoint-header"><span class="method">POST</span><span class="endpoint-url">/market/losers</span></div>
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/market/52week-low</span>
+                </div>
                 <table class="data-table">
-                    <tr><th>Symbol</th><th>Price</th><th>Change</th></tr>
-                    <tr><td>UBL</td><td>210.30</td><td style="color: #F6465D;">-2.41%</td></tr>
-                    <tr><td>HBL</td><td>115.40</td><td style="color: #F6465D;">-1.79%</td></tr>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>52W Low</th>
+                        <th>% From Low</th>
+                    </tr>
+                    <tr>
+                        <td>HBL</td>
+                        <td>115.40</td>
+                        <td>112.00</td>
+                        <td>3.0%</td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -1444,181 +1833,407 @@
         <!-- Footer -->
         <div class="footer">
             <p>UHF Trading Platform API Documentation v1.0</p>
-            <p>© 2026 UHF. All rights reserved. | Pakistan Stock Exchange Integration</p>
+            <p>Complete POST-Based Integration for Pakistan Stock Exchange (PSX)</p>
+            <p>© 2026 UHF. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 11px;">Real-time WebSocket | Live Data Streams | Binance-Style
+                Interface</p>
         </div>
     </div>
 
     <script>
-        // Default values for reset
-        const defaults = {
-            'last-trade': '{\n  "symbol": "PSO",\n  "market": "REGULAR"\n}',
-            'quote': '{\n  "symbol": "PSO"\n}',
-            'depth': '{\n  "symbol": "PSO",\n  "levels": 10\n}',
-            'snapshot': '{\n  "symbol": "PSO"\n}',
-            'klines': '{\n  "symbol": "PSO",\n  "interval": "5m",\n  "limit": 100\n}',
-            'movers': '{\n  "type": "gainers",\n  "limit": 10\n}',
-            'indices': '{\n  "indices": ["KSE100", "KSE30"]\n}',
-            'sectors': '{\n  "sectors": ["OILGAS", "BANK"]\n}',
-            'futures': '{\n  "symbol": "PSO"\n}',
-            'etfs': '{\n  "symbol": "KSE100ETF"\n}',
-            'symbol-detail': '{\n  "symbol": "PSO",\n  "include": ["indicators", "fundamentals"]\n}',
-            'ws-subscribe': '{\n  "action": "subscribe",\n  "market": ["PSO", "HUBC", "KSE100"],\n  "types": ["trade", "quote"]\n}',
-            'rms': '{\n  "account": "A12345678",\n  "order": {\n    "symbol": "PSO",\n    "side": "BUY",\n    "qty": 10000,\n    "price": 186.40,\n    "value": 1864000\n  }\n}'
+        // WebSocket Simulation
+        let wsConnected = true;
+        let wsMessages = [];
+        let messageCounter = 0;
+        let tickerInterval;
+        let chartInterval;
+
+        // Default values
+        const defaultValues = {
+            'ws-subscribe': `{
+  "action": "subscribe",
+  "request_id": "sub_" + Date.now(),
+  "channels": {
+    "market": {
+      "symbols": ["PSO", "HUBC", "MARI", "SYS"],
+      "types": ["trade", "quote", "depth", "ohlc"]
+    },
+    "orders": {
+      "accounts": ["A12345678"],
+      "types": ["new", "fill", "cancel", "reject"]
+    }
+  },
+  "depth_levels": 10,
+  "snapshot": true
+}`,
+            'last-trade': `{
+  "symbol": "PSO",
+  "market": "REGULAR",
+  "timestamp": "2026-02-16T11:35:00+05:00"
+}`,
+            'market-depth': `{
+  "symbol": "PSO",
+  "levels": 10,
+  "timestamp": "2026-02-16T11:35:00+05:00"
+}`,
+            'symbol-detail': `{
+  "symbol": "PSO",
+  "include": {
+    "real_time": true,
+    "depth": true,
+    "indicators": true,
+    "fundamentals": true,
+    "corporate_actions": true
+  },
+  "depth_levels": 10,
+  "timestamp": "2026-02-16T11:35:00+05:00"
+}`,
+            'order-limit': `{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "BUY",
+  "order_type": "LIMIT",
+  "quantity": 1000,
+  "price": 186.40,
+  "time_in_force": "DAY"
+}`,
+            'order-market': `{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "SELL",
+  "order_type": "MARKET",
+  "quantity": 500,
+  "time_in_force": "IOC"
+}`,
+            'order-stop': `{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "SELL",
+  "order_type": "STOP_LOSS",
+  "quantity": 1000,
+  "stop_price": 184.50
+}`,
+            'order-fok': `{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "BUY",
+  "order_type": "FOK",
+  "quantity": 10000,
+  "price": 186.40
+}`,
+            'order-ioc': `{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_" + Date.now(),
+  "symbol": "PSO",
+  "side": "BUY",
+  "order_type": "IOC",
+  "quantity": 5000,
+  "price": 186.45
+}`,
+            'order-modify': `{
+  "order_id": "ORD1234567890",
+  "price": 186.50,
+  "quantity": 800
+}`,
+            'order-cancel': `{
+  "order_id": "ORD1234567892"
+}`,
+            'order-history': `{
+  "account": "A12345678",
+  "from_date": "2026-02-01",
+  "to_date": "2026-02-16",
+  "symbol": "PSO",
+  "status": ["FILLED", "PARTIALLY_FILLED"]
+}`,
+            'trade-confirm': `{
+  "execution_id": "EXEC20260216001"
+}`,
+            'rms-validate': `{
+  "account": "A12345678",
+  "order": {
+    "symbol": "PSO",
+    "side": "BUY",
+    "quantity": 10000,
+    "price": 186.40,
+    "value": 1864000.00
+  },
+  "checks": [
+    "buying_power",
+    "margin",
+    "position_limit",
+    "price_band",
+    "circuit_breaker"
+  ]
+}`,
+            'account-summary': `{
+  "account": "A12345678",
+  "include": ["funds", "positions", "exposure"]
+}`,
+            'account-holdings': `{
+  "account": "A12345678",
+  "include_pnl": true
+}`
         };
 
-        function resetToDefault(id) {
-            if (defaults[id]) {
-                document.getElementById(id).value = defaults[id];
+        // Reset function
+        function resetToDefault(elementId) {
+            if (defaultValues[elementId]) {
+                document.getElementById(elementId).value = defaultValues[elementId];
             }
         }
 
-        function copyToClipboard(id) {
-            const el = document.getElementById(id);
-            el.select();
+        // Copy function
+        function copyToClipboard(elementId) {
+            const textarea = document.getElementById(elementId);
+            textarea.select();
             document.execCommand('copy');
-            alert('Copied!');
+
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
         }
 
-        // WebSocket functions
+        // WebSocket Functions
         function connectWebSocket() {
+            wsConnected = true;
             document.getElementById('wsLed').className = 'ws-led connected';
-            document.getElementById('wsStatus').textContent = 'WEBSOCKET CONNECTED';
-            addMessage('SYSTEM', 'WebSocket connected');
+            document.getElementById('wsStatus').textContent = 'WebSocket Connected';
+
+            addWSMessage('SYSTEM', 'WebSocket connected successfully');
+            addWSMessage('INFO', 'Session ID: ws_uhf_' + Date.now());
+
+            startLiveData();
         }
 
         function disconnectWebSocket() {
+            wsConnected = false;
             document.getElementById('wsLed').className = 'ws-led';
-            document.getElementById('wsStatus').textContent = 'WEBSOCKET DISCONNECTED';
-            addMessage('SYSTEM', 'WebSocket disconnected');
+            document.getElementById('wsStatus').textContent = 'WebSocket Disconnected';
+
+            addWSMessage('SYSTEM', 'WebSocket disconnected');
+
+            if (tickerInterval) clearInterval(tickerInterval);
+            if (chartInterval) clearInterval(chartInterval);
         }
 
         function subscribeMarket() {
-            addMessage('SUBSCRIBE', 'Market data subscribed');
+            addWSMessage('SUBSCRIBE', 'Subscribed to market data for PSO, HUBC, MARI, SYS');
+            addWSMessage('INFO', 'Channels: trade, quote, depth, ohlc');
         }
 
         function subscribeOrders() {
-            addMessage('SUBSCRIBE', 'Order updates subscribed');
-        }
-
-        function clearMessages() {
-            document.getElementById('wsMessages').innerHTML = '';
+            addWSMessage('SUBSCRIBE', 'Subscribed to order updates for account A12345678');
+            addWSMessage('INFO', 'Order types: new, fill, cancel, reject');
         }
 
         function sendWebSocketMessage() {
-            addMessage('SENT', 'Subscription request sent');
+            const message = document.getElementById('ws-subscribe').value;
+            addWSMessage('SENT', message.substring(0, 50) + '...');
         }
 
-        function addMessage(type, data) {
+        function addWSMessage(type, data) {
             const container = document.getElementById('wsMessages');
             const now = new Date();
-            const time = `[${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
-            const msg = document.createElement('div');
-            msg.className = 'ws-message';
-            msg.innerHTML = `<span class="timestamp">${time}</span><span class="type">${type}</span><span class="data">${data}</span>`;
-            container.insertBefore(msg, container.firstChild);
-            document.getElementById('msgRate').textContent = 24 + Math.floor(Math.random() * 10);
-        }
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
 
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-            event.target.classList.add('active');
-        }
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'ws-message';
+            msgDiv.innerHTML = `
+                <span class="timestamp">[${timeStr}]</span>
+                <span class="type">${type}</span>
+                <span class="data">${data}</span>
+            `;
 
-        function changeInterval(interval, btn) {
-            document.querySelectorAll('.interval-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+            container.insertBefore(msgDiv, container.firstChild);
 
-        // Live data simulation
-        function updateChart() {
-            const chart = document.getElementById('candleChart');
-            if (!chart) return;
-            chart.innerHTML = '';
-            for (let i = 0; i < 50; i++) {
-                const candle = document.createElement('div');
-                candle.className = 'candle' + (Math.random() > 0.5 ? ' red' : '');
-                candle.style.height = (30 + Math.random() * 150) + 'px';
-                candle.style.left = (i * 12) + 'px';
-                chart.appendChild(candle);
+            // Keep only last 50 messages
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
             }
 
-            const volume = document.getElementById('volumeBars');
-            if (volume) {
-                volume.innerHTML = '';
-                for (let i = 0; i < 50; i++) {
-                    const bar = document.createElement('div');
-                    bar.className = 'volume-bar';
-                    bar.style.height = (20 + Math.random() * 40) + 'px';
-                    volume.appendChild(bar);
-                }
-            }
+            // Update message rate
+            messageCounter++;
+            document.getElementById('msgRate').textContent = messageCounter + 24;
         }
 
-        function updateOrderBook() {
-            const bids = document.getElementById('orderBookBids');
-            const asks = document.getElementById('orderBookAsks');
-            
-            if (bids) {
-                bids.innerHTML = '';
-                for (let i = 0; i < 10; i++) {
-                    const row = document.createElement('div');
-                    row.className = 'order-book-row';
-                    row.innerHTML = `<span class="bid-price">${(186.40 - i * 0.05).toFixed(2)}</span><span>${Math.floor(1000 + Math.random() * 9000)}</span><span>${(Math.random() * 2).toFixed(1)}M</span>`;
-                    bids.appendChild(row);
-                }
-            }
+        // Live Data Generation
+        function startLiveData() {
+            // Update ticker every 2 seconds
+            tickerInterval = setInterval(() => {
+                updateTicker();
+                updateOrderBook();
+                addWSMessage('TRADE', `PSO: ${(186 + Math.random() * 2).toFixed(2)} (${Math.floor(Math.random() * 2000)} shares)`);
+            }, 2000);
 
-            if (asks) {
-                asks.innerHTML = '';
-                for (let i = 1; i <= 10; i++) {
-                    const row = document.createElement('div');
-                    row.className = 'order-book-row';
-                    row.innerHTML = `<span class="ask-price">${(186.45 + i * 0.05).toFixed(2)}</span><span>${Math.floor(800 + Math.random() * 8000)}</span><span>${(Math.random() * 1.5).toFixed(1)}M</span>`;
-                    asks.appendChild(row);
-                }
-            }
+            // Update chart every 5 seconds
+            chartInterval = setInterval(() => {
+                generateChart();
+                updatePrice();
+            }, 5000);
         }
 
         function updateTicker() {
             const ticker = document.getElementById('marketTicker');
-            if (!ticker) return;
-            const symbols = ['PSO', 'HUBC', 'MARI', 'SYS', 'FFC', 'KSE100', 'KMI30'];
+            const symbols = ['PSO', 'HUBC', 'MARI', 'SYS', 'FFC', 'LUCK', 'UBL', 'ENGRO'];
             let html = '';
-            symbols.forEach(s => {
+
+            symbols.forEach(symbol => {
                 const price = (100 + Math.random() * 2000).toFixed(2);
                 const change = (Math.random() * 4 - 1).toFixed(2);
-                html += `<div class="ticker-item"><span class="ticker-symbol">${s}</span><span class="ticker-price">${price}</span><span class="ticker-change ${change >= 0 ? 'positive' : 'negative'}">${change >= 0 ? '+' : ''}${change}%</span></div>`;
+                const changeClass = change >= 0 ? 'positive' : 'negative';
+                const sign = change >= 0 ? '+' : '';
+
+                html += `
+                    <div class="ticker-item">
+                        <span class="ticker-symbol">${symbol}</span>
+                        <span class="ticker-price">${price}</span>
+                        <span class="ticker-change ${changeClass}">${sign}${change}%</span>
+                    </div>
+                `;
             });
+
             ticker.innerHTML = html;
         }
 
-        function updateStats() {
-            document.getElementById('currentPrice').textContent = (186 + Math.random() * 2).toFixed(2);
-            document.getElementById('high24h').textContent = (187 + Math.random()).toFixed(2);
-            document.getElementById('low24h').textContent = (184 + Math.random()).toFixed(2);
-            document.getElementById('volume24h').textContent = (2 + Math.random()).toFixed(2) + 'M';
-            document.getElementById('turnover').textContent = (456 + Math.random() * 10).toFixed(1) + 'M';
-            document.getElementById('wsLatency').textContent = (10 + Math.floor(Math.random() * 20)) + 'ms';
+        function updateOrderBook() {
+            const bidsContainer = document.getElementById('orderBookBids');
+            const asksContainer = document.getElementById('orderBookAsks');
+
+            if (bidsContainer) {
+                bidsContainer.innerHTML = '';
+                for (let i = 0; i < 10; i++) {
+                    const price = (186.40 - i * 0.05 - Math.random() * 0.02).toFixed(2);
+                    const size = Math.floor(1000 + Math.random() * 9000);
+                    const total = (price * size / 1000000).toFixed(2) + 'M';
+                    const row = document.createElement('div');
+                    row.className = 'order-book-row';
+                    row.innerHTML = `
+                        <span class="bid-price">${price}</span>
+                        <span>${size.toLocaleString()}</span>
+                        <span>${total}</span>
+                    `;
+                    bidsContainer.appendChild(row);
+                }
+            }
+
+            if (asksContainer) {
+                asksContainer.innerHTML = '';
+                for (let i = 1; i <= 10; i++) {
+                    const price = (186.45 + i * 0.05 + Math.random() * 0.02).toFixed(2);
+                    const size = Math.floor(800 + Math.random() * 8000);
+                    const total = (price * size / 1000000).toFixed(2) + 'M';
+                    const row = document.createElement('div');
+                    row.className = 'order-book-row';
+                    row.innerHTML = `
+                        <span class="ask-price">${price}</span>
+                        <span>${size.toLocaleString()}</span>
+                        <span>${total}</span>
+                    `;
+                    asksContainer.appendChild(row);
+                }
+            }
         }
 
-        // Initialize
-        window.onload = function() {
+        function updatePrice() {
+            const price = 186 + Math.random() * 2;
+            const prevPrice = parseFloat(document.getElementById('currentPrice').textContent);
+            const change = price - prevPrice;
+            const changePercent = (change / prevPrice * 100).toFixed(2);
+
+            document.getElementById('currentPrice').textContent = price.toFixed(2);
+            document.getElementById('priceChange').textContent = (change > 0 ? '+' : '') + change.toFixed(2) + ' (' + (change > 0 ? '+' : '') + changePercent + '%)';
+            document.getElementById('priceChange').className = 'price-change ' + (change >= 0 ? 'positive' : 'negative');
+
+            document.getElementById('high24h').textContent = (187.50 + Math.random() * 0.5).toFixed(2);
+            document.getElementById('low24h').textContent = (184.80 - Math.random() * 0.5).toFixed(2);
+            document.getElementById('volume24h').textContent = (2.45 + Math.random() * 0.2).toFixed(2) + 'M';
+            document.getElementById('turnover').textContent = (456.2 + Math.random() * 10).toFixed(1) + 'M';
+            document.getElementById('vwap').textContent = (186.12 + Math.random() * 0.5).toFixed(2);
+            document.getElementById('trades').textContent = (3245 + Math.floor(Math.random() * 100)).toLocaleString();
+        }
+
+        function generateChart() {
+            const candleChart = document.getElementById('candleChart');
+            const volumeBars = document.getElementById('volumeBars');
+
+            if (candleChart) {
+                candleChart.innerHTML = '';
+                const basePrice = 185;
+                for (let i = 0; i < 50; i++) {
+                    const candle = document.createElement('div');
+                    const isRed = Math.random() > 0.5;
+                    candle.className = 'candle' + (isRed ? ' red' : '');
+
+                    // Generate realistic candle height
+                    const height = 30 + Math.random() * 150;
+                    candle.style.height = height + 'px';
+                    candle.style.left = (i * 12) + 'px';
+                    candle.style.bottom = '50px';
+                    candle.style.width = '8px';
+                    candle.style.position = 'absolute';
+
+                    // Add tooltip
+                    const price = basePrice + (i - 25) * 0.1 + Math.random() * 2;
+                    candle.setAttribute('data-tooltip', `Price: ${price.toFixed(2)}`);
+                    candle.classList.add('tooltip');
+
+                    candleChart.appendChild(candle);
+                }
+            }
+
+            if (volumeBars) {
+                volumeBars.innerHTML = '';
+                for (let i = 0; i < 50; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'volume-bar';
+                    const height = 20 + Math.random() * 40;
+                    bar.style.height = height + 'px';
+                    bar.setAttribute('data-tooltip', `Volume: ${Math.floor(100000 + Math.random() * 900000)}`);
+                    bar.classList.add('tooltip');
+                    volumeBars.appendChild(bar);
+                }
+            }
+        }
+
+        function changeInterval(interval) {
+            const buttons = document.querySelectorAll('.interval-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            addWSMessage('CHART', `Interval changed to ${interval}`);
+            generateChart();
+        }
+
+        // Initialize on load
+        window.onload = function () {
             connectWebSocket();
-            updateChart();
+            generateChart();
             updateOrderBook();
             updateTicker();
-            
-            setInterval(updateChart, 5000);
-            setInterval(updateOrderBook, 3000);
-            setInterval(updateTicker, 4000);
-            setInterval(updateStats, 2000);
-            
-            // Message rate simulation
+
+            // Update message rate every second
             setInterval(() => {
-                document.getElementById('msgRate').textContent = 24 + Math.floor(Math.random() * 10);
+                messageCounter = 0;
             }, 1000);
+
+            // Update latency randomly
+            setInterval(() => {
+                document.getElementById('wsLatency').textContent = (10 + Math.floor(Math.random() * 20)) + 'ms';
+            }, 3000);
         };
     </script>
 </body>
+
 </html>
