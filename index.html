@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UHF Trading Platform - PSX Trading API Documentation</title>
+    <title>UHF Trading Platform - Complete PSX Trading API Documentation</title>
     <style>
         * {
             margin: 0;
@@ -384,24 +384,62 @@
             color: #0B0F1C;
         }
 
-        /* Chart Area */
+        /* Chart Area - Real Candlestick Chart */
         .chart-area {
             background: #2B3139;
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             margin: 15px 0;
-            height: 250px;
+            height: 300px;
             position: relative;
             border: 1px solid #3A3F4A;
+            overflow: hidden;
         }
 
-        .chart-placeholder {
+        .candlestick-chart {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .candle-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            position: relative;
+        }
+
+        .candle-body {
+            width: 80%;
+            background: #0ECB81;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .candle-body.red {
+            background: #F6465D;
+        }
+
+        .candle-wick {
+            width: 2px;
+            background: #A6B0C2;
             position: absolute;
-            top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
             color: #A6B0C2;
-            font-size: 14px;
+            font-size: 11px;
         }
 
         /* Position Info */
@@ -592,81 +630,61 @@
             margin-left: auto;
         }
 
-        /* JSON Editor */
-        .json-editor {
-            padding: 15px;
+        /* JSON Request/Response Section */
+        .json-section {
+            padding: 20px;
             border-bottom: 1px solid #2B3139;
         }
 
-        .json-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .json-header span {
+        .json-title {
             color: #F0B90B;
+            font-size: 14px;
             font-weight: 600;
-            font-size: 13px;
-        }
-
-        .action-buttons {
+            margin-bottom: 10px;
             display: flex;
+            align-items: center;
             gap: 8px;
         }
 
-        .action-btn {
+        .json-box {
             background: #2B3139;
             border: 1px solid #3A3F4A;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 13px;
             color: #A6B0C2;
-            padding: 4px 12px;
-            border-radius: 6px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .json-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .json-box .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #1E2329;
+            border: 1px solid #3A3F4A;
+            color: #F0B90B;
+            padding: 4px 10px;
+            border-radius: 4px;
             font-size: 11px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .action-btn:hover {
+        .json-box .copy-btn:hover {
             border-color: #F0B90B;
-            color: #F0B90B;
-        }
-
-        .json-content textarea {
-            width: 100%;
             background: #2B3139;
-            border: 1px solid #3A3F4A;
-            color: #A6B0C2;
-            font-family: monospace;
-            font-size: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            resize: vertical;
-            outline: none;
-            min-height: 80px;
         }
 
-        .json-content textarea:focus {
-            border-color: #F0B90B;
-        }
-
-        .response-preview {
-            background: #2B3139;
-            border-left: 3px solid #F0B90B;
-            padding: 12px;
-            margin: 0 15px 15px 15px;
-            border-radius: 8px;
-        }
-
-        .response-preview pre {
-            color: #A6B0C2;
-            font-family: monospace;
-            font-size: 11px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        /* Order Types Grid - Based on Figma Screenshots */
+        /* Order Types Grid */
         .order-types-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -686,14 +704,17 @@
         }
 
         .order-preview {
-            padding: 15px;
+            padding: 20px;
+            border-bottom: 1px solid #2B3139;
         }
 
         .preview-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 13px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #2B3139;
         }
 
         .preview-row .value {
@@ -779,7 +800,7 @@
             border-radius: 2px;
         }
 
-        .order-note, .order-warning, .order-summary {
+        .order-note, .order-warning, .order-summary, .order-info {
             font-size: 11px;
             padding: 8px 10px;
             border-radius: 6px;
@@ -802,6 +823,11 @@
         .order-summary {
             background: #2B3139;
             color: #A6B0C2;
+        }
+
+        .order-info {
+            background: rgba(14, 203, 129, 0.1);
+            color: #0ECB81;
         }
 
         .confirm-btn {
@@ -867,7 +893,7 @@
             margin-top: 10px;
         }
 
-        /* PIN Section - From Figma */
+        /* PIN Section */
         .pin-section {
             background: #1E2329;
             border: 1px solid #2B3139;
@@ -957,7 +983,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-bottom: 30px;
+            margin: 20px 0;
         }
 
         .data-card {
@@ -969,27 +995,14 @@
 
         .data-header {
             background: #2B3139;
-            padding: 10px 15px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             gap: 10px;
             border-bottom: 1px solid #3A3F4A;
         }
 
-        .data-preview {
-            padding: 15px;
-            font-family: monospace;
-            font-size: 12px;
-            color: #A6B0C2;
-        }
-
-        .data-preview pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        /* Holdings Section - From Figma */
+        /* Holdings Section */
         .holdings-section {
             background: #1E2329;
             border: 1px solid #2B3139;
@@ -1006,7 +1019,7 @@
         }
 
         .holdings-list {
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
         }
 
@@ -1014,7 +1027,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
+            padding: 12px;
             border-bottom: 1px solid #2B3139;
             cursor: pointer;
         }
@@ -1210,7 +1223,7 @@
             <a href="#websocket">WEBSOCKET</a>
         </div>
 
-        <!-- Market Segments -->
+        <!-- Market Segments (From Figma Page 74) -->
         <div class="market-segments">
             <div class="segment-card"><div class="name">KSE 100</div><div class="desc">100 Largest companies</div></div>
             <div class="segment-card"><div class="name">KSE 30</div><div class="desc">Top 30 Liquid</div></div>
@@ -1220,7 +1233,7 @@
             <div class="segment-card"><div class="name">PSXDIV20</div><div class="desc">Dividend Paying</div></div>
         </div>
 
-        <!-- Trading View - Main Interface (From Figma) -->
+        <!-- Trading View - Complete Interface from Figma (Pages 55, 70) -->
         <div class="section-header" id="trading">
             <h2>TRADING INTERFACE</h2>
             <div class="version">MEBL - Meezan Bank Ltd</div>
@@ -1240,7 +1253,7 @@
                     </div>
                 </div>
 
-                <!-- Timeframe Selector -->
+                <!-- Timeframe Selector (From Figma Page 55) -->
                 <div class="timeframe-selector">
                     <button class="timeframe-btn">1h</button>
                     <button class="timeframe-btn">1d</button>
@@ -1250,12 +1263,26 @@
                     <button class="timeframe-btn">All</button>
                 </div>
 
-                <!-- Chart Area -->
+                <!-- Real Candlestick Chart (From Figma Page 55) -->
                 <div class="chart-area">
-                    <div class="chart-placeholder">Chart Area (Candlestick Chart)</div>
+                    <div class="candlestick-chart" id="candleChart"></div>
+                    <div class="chart-labels">
+                        <span>09:30</span>
+                        <span>10:00</span>
+                        <span>10:30</span>
+                        <span>11:00</span>
+                        <span>11:30</span>
+                        <span>12:00</span>
+                        <span>12:30</span>
+                        <span>13:00</span>
+                        <span>13:30</span>
+                        <span>14:00</span>
+                        <span>14:30</span>
+                        <span>15:00</span>
+                    </div>
                 </div>
 
-                <!-- Position Info (From Figma) -->
+                <!-- Position Info (From Figma Page 55) -->
                 <div class="position-info">
                     <div class="position-item">
                         <span class="position-label">Shares</span>
@@ -1283,14 +1310,14 @@
                     </div>
                 </div>
 
-                <!-- Buy/Sell Buttons -->
+                <!-- Buy/Sell Buttons (From Figma Page 55) -->
                 <div class="trade-actions">
                     <button class="buy-btn" onclick="openBuyOrder()">BUY</button>
                     <button class="sell-btn" onclick="openSellOrder()">SELL</button>
                 </div>
             </div>
 
-            <!-- Order Book Column (From Figma) -->
+            <!-- Order Book Column (From Figma Pages 54, 69) -->
             <div class="order-book">
                 <div class="order-book-header">
                     <span>Price</span>
@@ -1310,7 +1337,7 @@
                 <!-- Bids -->
                 <div class="order-book-bids" id="orderBookBids"></div>
                 
-                <!-- Stats -->
+                <!-- Stats (From Figma Page 55) -->
                 <div class="order-stats">
                     <div class="stat-row"><span>Open</span><span class="stat-value">112,539.17</span></div>
                     <div class="stat-row"><span>High</span><span class="stat-value">113,200.00</span></div>
@@ -1320,14 +1347,14 @@
             </div>
         </div>
 
-        <!-- Order Types Section (From Figma) -->
+        <!-- Order Types Section - Complete with Request/Response JSON -->
         <div class="section-header" id="orders">
             <h2>ORDER TYPES</h2>
-            <div class="version">All POST Endpoints</div>
+            <div class="version">All POST Endpoints with Request/Response</div>
         </div>
 
         <div class="order-types-grid">
-            <!-- Limit Order -->
+            <!-- 1. Limit Order (From Figma Page 47) -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1351,26 +1378,42 @@
                     </div>
                     <button class="confirm-btn">Confirm</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('limit')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('limit-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_001",
   "symbol": "MEBL",
   "side": "BUY",
-  "type": "LIMIT",
+  "order_type": "LIMIT",
   "quantity": 5000,
-  "price": 441.50
-}</textarea>
+  "price": 441.50,
+  "time_in_force": "DAY"
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('limit-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567890",
+  "client_order_id": "ORD_20260216_001",
+  "symbol": "MEBL",
+  "side": "BUY",
+  "order_type": "LIMIT",
+  "quantity": 5000,
+  "price": 441.50,
+  "status": "ACCEPTED",
+  "received_at": "2026-02-16T11:36:00+05:00",
+  "message": "Order accepted by exchange"
+}</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- Market Order -->
+            <!-- 2. Market Order -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1391,25 +1434,41 @@
                     <div class="order-note"><span>ⓘ</span> Market order will execute at best available price</div>
                     <button class="confirm-btn">Place Market Order</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('market')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('market-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_002",
   "symbol": "MEBL",
   "side": "BUY",
-  "type": "MARKET",
-  "quantity": 5000
-}</textarea>
+  "order_type": "MARKET",
+  "quantity": 5000,
+  "time_in_force": "IOC"
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('market-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567891",
+  "client_order_id": "ORD_20260216_002",
+  "symbol": "MEBL",
+  "side": "BUY",
+  "order_type": "MARKET",
+  "quantity": 5000,
+  "executed_quantity": 5000,
+  "average_price": 441.50,
+  "status": "FILLED",
+  "executed_at": "2026-02-16T11:36:05+05:00"
+}</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- Stop Loss (From Figma) -->
+            <!-- 3. Stop Loss (From Figma Page 62) -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1434,27 +1493,42 @@
                     <div class="order-summary">Order will Trigger if price falls to 147.23</div>
                     <button class="confirm-btn">Continue →</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('stop')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('stop-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_003",
   "symbol": "MEBL",
   "side": "SELL",
-  "type": "STOP_LOSS",
+  "order_type": "STOP_LOSS",
   "quantity": 10,
   "stop_price": 147.00,
   "limit_price": 147.00
-}</textarea>
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('stop-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567892",
+  "client_order_id": "ORD_20260216_003",
+  "symbol": "MEBL",
+  "side": "SELL",
+  "order_type": "STOP_LOSS",
+  "quantity": 10,
+  "stop_price": 147.00,
+  "limit_price": 147.00,
+  "status": "ACCEPTED",
+  "trigger_conditions": "Price falls below 147.00"
+}</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- Market If Touched (MIT) -->
+            <!-- 4. Market If Touched (MIT) (From Figma Page 63) -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1472,29 +1546,47 @@
                         <label>Trigger Price</label>
                         <input type="text" value="147.00">
                     </div>
+                    <div class="order-input">
+                        <label>Volume</label>
+                        <input type="text" value="10">
+                    </div>
                     <div class="order-note"><span>ⓘ</span> Once the trigger price is touched this order immediately converts to a Market Order</div>
                     <button class="confirm-btn">Continue</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('mit')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('mit-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_004",
   "symbol": "MEBL",
   "side": "BUY",
-  "type": "MIT",
+  "order_type": "MIT",
   "quantity": 10,
   "trigger_price": 147.00
-}</textarea>
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('mit-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567893",
+  "client_order_id": "ORD_20260216_004",
+  "symbol": "MEBL",
+  "side": "BUY",
+  "order_type": "MIT",
+  "quantity": 10,
+  "trigger_price": 147.00,
+  "status": "ACTIVE",
+  "message": "Order will trigger when price reaches 147.00"
+}</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- IOC Order (From Figma) -->
+            <!-- 5. IOC Order (From Figma Page 65) -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1512,29 +1604,49 @@
                         <label>Limit Price</label>
                         <input type="text" value="147.00">
                     </div>
+                    <div class="order-input">
+                        <label>Volume</label>
+                        <input type="text" value="10">
+                    </div>
                     <div class="order-warning">Any unfilled portion of this order will be removed from the market.</div>
                     <button class="confirm-btn">Continue</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('ioc')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('ioc-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_005",
   "symbol": "MEBL",
   "side": "BUY",
-  "type": "IOC",
+  "order_type": "IOC",
   "quantity": 10,
-  "price": 147.00
-}</textarea>
+  "price": 147.00,
+  "time_in_force": "IOC"
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('ioc-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567894",
+  "client_order_id": "ORD_20260216_005",
+  "symbol": "MEBL",
+  "side": "BUY",
+  "order_type": "IOC",
+  "quantity": 10,
+  "price": 147.00,
+  "executed_quantity": 5,
+  "status": "PARTIALLY_FILLED",
+  "message": "Remaining 5 units cancelled per IOC rules"
+}</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- FOK Order (From Figma) -->
+            <!-- 6. FOK Order (From Figma Page 67) -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1552,29 +1664,48 @@
                         <label>Limit Price</label>
                         <input type="text" value="147.00">
                     </div>
+                    <div class="order-input">
+                        <label>Volume</label>
+                        <input type="text" value="10">
+                    </div>
                     <div class="order-requirement">Entire order must be filled immediately or it will be cancelled.</div>
                     <button class="confirm-btn">Continue</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('fok')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('fok-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_006",
   "symbol": "MEBL",
   "side": "BUY",
-  "type": "FOK",
+  "order_type": "FOK",
   "quantity": 10,
-  "price": 147.00
-}</textarea>
+  "price": 147.00,
+  "time_in_force": "FOK"
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('fok-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567895",
+  "client_order_id": "ORD_20260216_006",
+  "symbol": "MEBL",
+  "side": "BUY",
+  "order_type": "FOK",
+  "quantity": 10,
+  "price": 147.00,
+  "status": "REJECTED",
+  "message": "Insufficient volume to fill entire order - FOK condition failed"
+}</pre>
                     </div>
                 </div>
             </div>
 
-            <!-- MTL Order -->
+            <!-- 7. MTL Order (From Figma Page 66) -->
             <div class="order-card">
                 <div class="endpoint-header">
                     <span class="method">POST</span>
@@ -1592,46 +1723,82 @@
                     <div class="order-warning">Any unfilled portion will be cancelled immediately.</div>
                     <button class="confirm-btn">Place MTL Order</button>
                 </div>
-                <div class="json-editor">
-                    <div class="json-header">
-                        <span>Request</span>
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="copyJson('mtl')">Copy</button>
-                        </div>
-                    </div>
-                    <div class="json-content">
-                        <textarea readonly>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('mtl-req')">Copy</button>
+                        <pre>{
+  "client_id": "uhf_001",
+  "account": "A12345678",
+  "client_order_id": "ORD_20260216_007",
   "symbol": "MEBL",
   "side": "BUY",
-  "type": "MTL",
+  "order_type": "MTL",
   "quantity": 10
-}</textarea>
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('mtl-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567896",
+  "client_order_id": "ORD_20260216_007",
+  "symbol": "MEBL",
+  "side": "BUY",
+  "order_type": "MTL",
+  "quantity": 10,
+  "executed_quantity": 8,
+  "average_price": 441.50,
+  "status": "PARTIALLY_FILLED",
+  "message": "8 executed at market, remaining 2 cancelled"
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Order Confirmation (From Figma Page 53) -->
+            <div class="order-card">
+                <div class="endpoint-header">
+                    <span class="method">POST</span>
+                    <span class="endpoint-url">/api/v1/order/confirm</span>
+                </div>
+                <div class="order-preview">
+                    <div class="confirmation-details">
+                        <div class="confirmation-header">Confirm Limit Order</div>
+                        <div class="confirmation-row"><span>Buy</span><span>MEBL</span></div>
+                        <div class="confirmation-row"><span>Order Type</span><span>Limit</span></div>
+                        <div class="confirmation-row"><span>Rate</span><span>PKR 441.50</span></div>
+                        <div class="confirmation-row"><span>Quantity</span><span>5,000</span></div>
+                        <div class="confirmation-total"><span>Total Value*</span><span>PKR 2,207,500.00</span></div>
+                        <div class="confirmation-note">*Not including any commissions or fees</div>
+                    </div>
+                    <button class="confirm-btn large">Confirm Order</button>
+                </div>
+                <div class="json-section">
+                    <div class="json-title">📤 Request Payload</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('confirm-req')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567890",
+  "client_order_id": "ORD_20260216_001",
+  "confirm": true
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('confirm-res')">Copy</button>
+                        <pre>{
+  "order_id": "ORD1234567890",
+  "status": "CONFIRMED",
+  "message": "Order confirmed and sent to exchange",
+  "confirmed_at": "2026-02-16T11:37:00+05:00"
+}</pre>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Order Confirmation (From Figma) -->
-        <div class="order-card" style="margin: 20px 0;">
-            <div class="endpoint-header">
-                <span class="method">POST</span>
-                <span class="endpoint-url">/api/v1/order/confirm</span>
-            </div>
-            <div class="order-preview">
-                <div class="confirmation-details">
-                    <div class="confirmation-header">Confirm Limit Order</div>
-                    <div class="confirmation-row"><span>Buy</span><span>MEBL</span></div>
-                    <div class="confirmation-row"><span>Order Type</span><span>Limit</span></div>
-                    <div class="confirmation-row"><span>Rate</span><span>PKR 441.50</span></div>
-                    <div class="confirmation-row"><span>Quantity</span><span>5,000</span></div>
-                    <div class="confirmation-total"><span>Total Value*</span><span>PKR 2,207,500.00</span></div>
-                    <div class="confirmation-note">*Not including any commissions or fees</div>
-                </div>
-                <button class="confirm-btn large">Confirm Order</button>
-            </div>
-        </div>
-
-        <!-- PIN Authentication (From Figma) -->
+        <!-- PIN Authentication (From Figma Page 57) -->
         <div class="pin-section">
             <div class="pin-header">Enter Your PIN</div>
             <div class="pin-inputs">
@@ -1646,10 +1813,10 @@
             <button class="face-id-btn">Authenticate Using Face ID</button>
         </div>
 
-        <!-- Market Data Section -->
+        <!-- Market Data Section - Complete with Request/Response JSON -->
         <div class="section-header" id="market-data">
             <h2>MARKET DATA APIS</h2>
-            <div class="version">Real-Time Quotes</div>
+            <div class="version">Real-Time Quotes with Request/Response</div>
         </div>
 
         <div class="market-data-grid">
@@ -1659,19 +1826,26 @@
                     <span class="method">POST</span>
                     <span class="endpoint-url">/api/v1/market/last-trade</span>
                 </div>
-                <div class="data-preview">
-                    <pre>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('last-trade-req')">Copy</button>
+                        <pre>{
+  "symbol": "MEBL",
+  "market": "REGULAR"
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('last-trade-res')">Copy</button>
+                        <pre>{
   "symbol": "MEBL",
   "price": 112539.17,
+  "size": 5000,
+  "time": "09:59:22",
   "change": 0.25,
-  "change_percent": 1.01,
-  "volume": 4123123,
-  "time": "09:59 AM"
+  "change_percent": 1.01
 }</pre>
-                </div>
-                <div class="json-header" style="padding: 8px 15px;">
-                    <div class="action-buttons">
-                        <button class="action-btn" onclick="copyJson('last-trade')">Copy Request</button>
                     </div>
                 </div>
             </div>
@@ -1682,17 +1856,33 @@
                     <span class="method">POST</span>
                     <span class="endpoint-url">/api/v1/market/quote</span>
                 </div>
-                <div class="data-preview">
-                    <pre>{
-  "symbol": "MEBL",
-  "bid": {"price": 18.61, "size": 1030},
-  "ask": {"price": 18.61, "size": 175},
-  "spread": 0.00
+                <div class="json-section">
+                    <div class="json-title">📤 Request</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('quote-req')">Copy</button>
+                        <pre>{
+  "symbol": "MEBL"
 }</pre>
-                </div>
-                <div class="json-header" style="padding: 8px 15px;">
-                    <div class="action-buttons">
-                        <button class="action-btn" onclick="copyJson('quote')">Copy Request</button>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('quote-res')">Copy</button>
+                        <pre>{
+  "symbol": "MEBL",
+  "bid": {
+    "price": 18.61,
+    "size": 1030,
+    "orders": 8
+  },
+  "ask": {
+    "price": 18.61,
+    "size": 175,
+    "orders": 3
+  },
+  "spread": 0.00,
+  "last": 112539.17,
+  "timestamp": "09:59:22"
+}</pre>
                     </div>
                 </div>
             </div>
@@ -1703,26 +1893,39 @@
                     <span class="method">POST</span>
                     <span class="endpoint-url">/api/v1/market/depth</span>
                 </div>
-                <div class="data-preview">
-                    <pre>{
+                <div class="json-section">
+                    <div class="json-title">📤 Request</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('depth-req')">Copy</button>
+                        <pre>{
+  "symbol": "MEBL",
+  "levels": 10
+}</pre>
+                    </div>
+                    <div class="json-title">📥 Response</div>
+                    <div class="json-box">
+                        <button class="copy-btn" onclick="copyJson('depth-res')">Copy</button>
+                        <pre>{
   "symbol": "MEBL",
   "bids": [
-    {"price": 18.61, "size": 1030}
+    {"price": 18.61, "size": 1030, "orders": 8},
+    {"price": 18.60, "size": 1500, "orders": 5},
+    {"price": 18.59, "size": 2000, "orders": 6}
   ],
   "asks": [
-    {"price": 18.61, "size": 175}
-  ]
+    {"price": 18.61, "size": 175, "orders": 3},
+    {"price": 18.62, "size": 200, "orders": 2},
+    {"price": 18.63, "size": 300, "orders": 4}
+  ],
+  "total_bid_size": 4530,
+  "total_ask_size": 675
 }</pre>
-                </div>
-                <div class="json-header" style="padding: 8px 15px;">
-                    <div class="action-buttons">
-                        <button class="action-btn" onclick="copyJson('depth')">Copy Request</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Holdings Section (From Figma) -->
+        <!-- Holdings Section (From Figma Page 59) -->
         <div class="section-header" id="holdings">
             <h2>YOUR HOLDINGS</h2>
             <div class="version">Portfolio Summary</div>
@@ -1761,6 +1964,16 @@
                     <span class="holding-price">PKR 650.00</span>
                     <span class="holding-change negative">-1.06%</span>
                 </div>
+                <div class="holding-item">
+                    <span class="holding-symbol">NAP</span>
+                    <span class="holding-price">PKR 480.20</span>
+                    <span class="holding-change positive">+1.61%</span>
+                </div>
+                <div class="holding-item">
+                    <span class="holding-symbol">SAP</span>
+                    <span class="holding-price">PKR 480.20</span>
+                    <span class="holding-change positive">+1.61%</span>
+                </div>
             </div>
             <input type="text" class="search-input" placeholder="Q Search Symbol">
         </div>
@@ -1780,17 +1993,32 @@
                 <div class="console-message">
                     <span class="msg-time">[11:30:00]</span>
                     <span class="msg-type">SYSTEM</span>
-                    <span class="msg-data">WebSocket connected</span>
+                    <span class="msg-data">WebSocket connected - Session ID: ws_uhf_001</span>
                 </div>
                 <div class="console-message">
                     <span class="msg-time">[11:30:01]</span>
+                    <span class="msg-type">MARKET</span>
+                    <span class="msg-data">Subscribed to MEBL, PSO, HUBC</span>
+                </div>
+                <div class="console-message">
+                    <span class="msg-time">[11:30:02]</span>
                     <span class="msg-type">TRADE</span>
                     <span class="msg-data">MEBL: 112,539.17 (5,000 shares)</span>
                 </div>
                 <div class="console-message">
-                    <span class="msg-time">[11:30:02]</span>
+                    <span class="msg-time">[11:30:03]</span>
+                    <span class="msg-type">QUOTE</span>
+                    <span class="msg-data">MEBL Bid: 18.61 (1030) | Ask: 18.61 (175)</span>
+                </div>
+                <div class="console-message">
+                    <span class="msg-time">[11:30:04]</span>
                     <span class="msg-type">ORDER</span>
-                    <span class="msg-data">Limit order executed: 5,000 @ 441.50</span>
+                    <span class="msg-data">Limit order ORD1234567890 executed: 5,000 @ 441.50</span>
+                </div>
+                <div class="console-message">
+                    <span class="msg-time">[11:30:05]</span>
+                    <span class="msg-type">DEPTH</span>
+                    <span class="msg-data">MEBL Depth: Bids 4530 | Asks 675</span>
                 </div>
             </div>
         </div>
@@ -1798,7 +2026,7 @@
         <!-- Footer -->
         <div class="footer">
             <p>UHF Trading Platform v2.0 | Pakistan Stock Exchange (PSX) Integration</p>
-            <p>© 2026 UHF. All rights reserved. | All endpoints use POST method</p>
+            <p>© 2026 UHF. All rights reserved. | All endpoints use POST method | Complete Request/Response JSON</p>
         </div>
     </div>
 
@@ -1812,7 +2040,7 @@
             wsConnected = true;
             document.getElementById('wsLed').className = 'ws-led connected';
             document.getElementById('wsStatus').textContent = 'WEBSOCKET CONNECTED';
-            addConsoleMessage('SYSTEM', 'WebSocket connected successfully');
+            addConsoleMessage('SYSTEM', 'WebSocket connected - Session ID: ws_uhf_' + Date.now());
             startLiveData();
         }
 
@@ -1868,23 +2096,38 @@
             document.getElementById('orders').scrollIntoView({ behavior: 'smooth' });
         }
 
+        // Copy JSON function
         function copyJson(type) {
             const jsons = {
-                'limit': '{\n  "symbol": "MEBL",\n  "side": "BUY",\n  "type": "LIMIT",\n  "quantity": 5000,\n  "price": 441.50\n}',
-                'market': '{\n  "symbol": "MEBL",\n  "side": "BUY",\n  "type": "MARKET",\n  "quantity": 5000\n}',
-                'stop': '{\n  "symbol": "MEBL",\n  "side": "SELL",\n  "type": "STOP_LOSS",\n  "quantity": 10,\n  "stop_price": 147.00,\n  "limit_price": 147.00\n}',
-                'mit': '{\n  "symbol": "MEBL",\n  "side": "BUY",\n  "type": "MIT",\n  "quantity": 10,\n  "trigger_price": 147.00\n}',
-                'ioc': '{\n  "symbol": "MEBL",\n  "side": "BUY",\n  "type": "IOC",\n  "quantity": 10,\n  "price": 147.00\n}',
-                'fok': '{\n  "symbol": "MEBL",\n  "side": "BUY",\n  "type": "FOK",\n  "quantity": 10,\n  "price": 147.00\n}',
-                'mtl': '{\n  "symbol": "MEBL",\n  "side": "BUY",\n  "type": "MTL",\n  "quantity": 10\n}',
-                'last-trade': '{\n  "symbol": "MEBL",\n  "market": "REGULAR"\n}',
-                'quote': '{\n  "symbol": "MEBL"\n}',
-                'depth': '{\n  "symbol": "MEBL",\n  "levels": 10\n}'
+                'limit-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_001",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "LIMIT",\n  "quantity": 5000,\n  "price": 441.50,\n  "time_in_force": "DAY"\n}',
+                'limit-res': '{\n  "order_id": "ORD1234567890",\n  "client_order_id": "ORD_20260216_001",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "LIMIT",\n  "quantity": 5000,\n  "price": 441.50,\n  "status": "ACCEPTED",\n  "received_at": "2026-02-16T11:36:00+05:00",\n  "message": "Order accepted by exchange"\n}',
+                'market-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_002",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "MARKET",\n  "quantity": 5000,\n  "time_in_force": "IOC"\n}',
+                'market-res': '{\n  "order_id": "ORD1234567891",\n  "client_order_id": "ORD_20260216_002",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "MARKET",\n  "quantity": 5000,\n  "executed_quantity": 5000,\n  "average_price": 441.50,\n  "status": "FILLED",\n  "executed_at": "2026-02-16T11:36:05+05:00"\n}',
+                'stop-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_003",\n  "symbol": "MEBL",\n  "side": "SELL",\n  "order_type": "STOP_LOSS",\n  "quantity": 10,\n  "stop_price": 147.00,\n  "limit_price": 147.00\n}',
+                'stop-res': '{\n  "order_id": "ORD1234567892",\n  "client_order_id": "ORD_20260216_003",\n  "symbol": "MEBL",\n  "side": "SELL",\n  "order_type": "STOP_LOSS",\n  "quantity": 10,\n  "stop_price": 147.00,\n  "limit_price": 147.00,\n  "status": "ACCEPTED",\n  "trigger_conditions": "Price falls below 147.00"\n}',
+                'mit-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_004",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "MIT",\n  "quantity": 10,\n  "trigger_price": 147.00\n}',
+                'mit-res': '{\n  "order_id": "ORD1234567893",\n  "client_order_id": "ORD_20260216_004",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "MIT",\n  "quantity": 10,\n  "trigger_price": 147.00,\n  "status": "ACTIVE",\n  "message": "Order will trigger when price reaches 147.00"\n}',
+                'ioc-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_005",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "IOC",\n  "quantity": 10,\n  "price": 147.00,\n  "time_in_force": "IOC"\n}',
+                'ioc-res': '{\n  "order_id": "ORD1234567894",\n  "client_order_id": "ORD_20260216_005",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "IOC",\n  "quantity": 10,\n  "price": 147.00,\n  "executed_quantity": 5,\n  "status": "PARTIALLY_FILLED",\n  "message": "Remaining 5 units cancelled per IOC rules"\n}',
+                'fok-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_006",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "FOK",\n  "quantity": 10,\n  "price": 147.00,\n  "time_in_force": "FOK"\n}',
+                'fok-res': '{\n  "order_id": "ORD1234567895",\n  "client_order_id": "ORD_20260216_006",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "FOK",\n  "quantity": 10,\n  "price": 147.00,\n  "status": "REJECTED",\n  "message": "Insufficient volume to fill entire order - FOK condition failed"\n}',
+                'mtl-req': '{\n  "client_id": "uhf_001",\n  "account": "A12345678",\n  "client_order_id": "ORD_20260216_007",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "MTL",\n  "quantity": 10\n}',
+                'mtl-res': '{\n  "order_id": "ORD1234567896",\n  "client_order_id": "ORD_20260216_007",\n  "symbol": "MEBL",\n  "side": "BUY",\n  "order_type": "MTL",\n  "quantity": 10,\n  "executed_quantity": 8,\n  "average_price": 441.50,\n  "status": "PARTIALLY_FILLED",\n  "message": "8 executed at market, remaining 2 cancelled"\n}',
+                'confirm-req': '{\n  "order_id": "ORD1234567890",\n  "client_order_id": "ORD_20260216_001",\n  "confirm": true\n}',
+                'confirm-res': '{\n  "order_id": "ORD1234567890",\n  "status": "CONFIRMED",\n  "message": "Order confirmed and sent to exchange",\n  "confirmed_at": "2026-02-16T11:37:00+05:00"\n}',
+                'last-trade-req': '{\n  "symbol": "MEBL",\n  "market": "REGULAR"\n}',
+                'last-trade-res': '{\n  "symbol": "MEBL",\n  "price": 112539.17,\n  "size": 5000,\n  "time": "09:59:22",\n  "change": 0.25,\n  "change_percent": 1.01\n}',
+                'quote-req': '{\n  "symbol": "MEBL"\n}',
+                'quote-res': '{\n  "symbol": "MEBL",\n  "bid": {\n    "price": 18.61,\n    "size": 1030,\n    "orders": 8\n  },\n  "ask": {\n    "price": 18.61,\n    "size": 175,\n    "orders": 3\n  },\n  "spread": 0.00,\n  "last": 112539.17,\n  "timestamp": "09:59:22"\n}',
+                'depth-req': '{\n  "symbol": "MEBL",\n  "levels": 10\n}',
+                'depth-res': '{\n  "symbol": "MEBL",\n  "bids": [\n    {"price": 18.61, "size": 1030, "orders": 8},\n    {"price": 18.60, "size": 1500, "orders": 5},\n    {"price": 18.59, "size": 2000, "orders": 6}\n  ],\n  "asks": [\n    {"price": 18.61, "size": 175, "orders": 3},\n    {"price": 18.62, "size": 200, "orders": 2},\n    {"price": 18.63, "size": 300, "orders": 4}\n  ],\n  "total_bid_size": 4530,\n  "total_ask_size": 675\n}'
             };
             
             if (jsons[type]) {
                 navigator.clipboard.writeText(jsons[type]).then(() => {
-                    addConsoleMessage('JSON', `${type.toUpperCase()} JSON copied to clipboard`);
+                    addConsoleMessage('JSON', `${type} copied to clipboard`);
+                }).catch(() => {
+                    alert('JSON copied to clipboard!');
                 });
             }
         }
@@ -1907,13 +2150,43 @@
             });
 
             // Live data simulation
+            function generateCandles() {
+                const chart = document.getElementById('candleChart');
+                if (!chart) return;
+                
+                chart.innerHTML = '';
+                for (let i = 0; i < 30; i++) {
+                    const container = document.createElement('div');
+                    container.className = 'candle-container';
+                    
+                    const open = 100 + Math.random() * 20;
+                    const close = open + (Math.random() * 10 - 5);
+                    const high = Math.max(open, close) + Math.random() * 5;
+                    const low = Math.min(open, close) - Math.random() * 5;
+                    
+                    const isGreen = close >= open;
+                    const color = isGreen ? '#0ECB81' : '#F6465D';
+                    
+                    const bodyHeight = Math.abs(close - open) * 3;
+                    const wickTop = (high - Math.max(open, close)) * 3;
+                    const wickBottom = (Math.min(open, close) - low) * 3;
+                    
+                    container.innerHTML = `
+                        <div class="candle-wick" style="height: ${wickTop + bodyHeight + wickBottom}px; top: ${-wickTop}px;"></div>
+                        <div class="candle-body ${!isGreen ? 'red' : ''}" style="height: ${bodyHeight}px; width: 80%; background: ${color};"></div>
+                    `;
+                    
+                    chart.appendChild(container);
+                }
+            }
+
             function updateOrderBook() {
                 const bidsContainer = document.getElementById('orderBookBids');
                 const asksContainer = document.getElementById('orderBookAsks');
                 
                 if (bidsContainer) {
                     bidsContainer.innerHTML = '';
-                    for (let i = 0; i < 5; i++) {
+                    for (let i = 0; i < 8; i++) {
                         const price = (18.61 - i * 0.01 - Math.random() * 0.02).toFixed(2);
                         const volume = Math.floor(500 + Math.random() * 2000);
                         const value = (price * volume / 1000).toFixed(0) + 'K';
@@ -1926,7 +2199,7 @@
                 
                 if (asksContainer) {
                     asksContainer.innerHTML = '';
-                    for (let i = 1; i <= 5; i++) {
+                    for (let i = 1; i <= 8; i++) {
                         const price = (18.61 + i * 0.01 + Math.random() * 0.02).toFixed(2);
                         const volume = Math.floor(400 + Math.random() * 1500);
                         const value = (price * volume / 1000).toFixed(0) + 'K';
@@ -1944,13 +2217,23 @@
                     const currentPrice = 112500 + Math.random() * 100;
                     priceEl.textContent = currentPrice.toFixed(2);
                 }
+                
+                const latencyEl = document.getElementById('wsLatency');
+                if (latencyEl) {
+                    latencyEl.textContent = (8 + Math.floor(Math.random() * 15)) + 'ms';
+                }
             }
 
             function startLiveData() {
+                generateCandles();
                 updateOrderBook();
                 updatePrice();
-                setInterval(updateOrderBook, 3000);
-                setInterval(updatePrice, 2000);
+                
+                setInterval(() => {
+                    generateCandles();
+                    updateOrderBook();
+                    updatePrice();
+                }, 3000);
             }
 
             startLiveData();
