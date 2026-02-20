@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Optimus Capital - Complete PSX Trading API Documentation</title>
+    <title>Optimus - Complete PSX Trading API Documentation</title>
     <style>
         /* ALL EXISTING STYLES PRESERVED - keeping them as is */
         * {
@@ -508,7 +509,8 @@
             margin-top: 15px;
         }
 
-        .buy-btn, .sell-btn {
+        .buy-btn,
+        .sell-btn {
             flex: 1;
             padding: 15px;
             border: none;
@@ -604,7 +606,8 @@
             font-weight: 600;
         }
 
-        .bid-volume, .ask-volume {
+        .bid-volume,
+        .ask-volume {
             font-size: 11px;
             color: #A6B0C2;
         }
@@ -854,7 +857,11 @@
             border-radius: 2px;
         }
 
-        .order-note, .order-warning, .order-summary, .order-info, .order-requirement {
+        .order-note,
+        .order-warning,
+        .order-summary,
+        .order-info,
+        .order-requirement {
             font-size: 11px;
             padding: 8px 10px;
             border-radius: 6px;
@@ -1231,23 +1238,51 @@
 
         /* Animations */
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes flashGreen {
-            0%, 100% { color: #0ECB81; }
-            50% { color: #FFFFFF; }
+
+            0%,
+            100% {
+                color: #0ECB81;
+            }
+
+            50% {
+                color: #FFFFFF;
+            }
         }
 
         @keyframes flashRed {
-            0%, 100% { color: #F6465D; }
-            50% { color: #FFFFFF; }
+
+            0%,
+            100% {
+                color: #F6465D;
+            }
+
+            50% {
+                color: #FFFFFF;
+            }
         }
 
         /* Footer */
@@ -1267,24 +1302,33 @@
             .trading-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .order-types-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .market-data-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
-        <div class="header">
-            <h1>OPTIMUS CAPITAL TRADING PLATFORM</h1>
-            <div class="subtitle">Pakistan Stock Exchange (PSX) - Complete Trading API Documentation for Vision Max Integration</div>
-            <div class="badge">Version 1.0 | All POST | Real-Time WebSocket</div>
+        <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>OPTIMUS TRADING PLATFORM</h1>
+                <div class="subtitle">Complete Trading API Documentation for Vision Max Integration</div>
+                <div class="badge">Version 1.0 | All POST | Real-Time WebSocket</div>
+            </div>
+
+            <div class="logo-container" style="margin-left: 20px;">
+                <img src="logo-uhf.png" alt="UHFSolutions Logo" style="height: 100px; width: auto;">
+                <!-- OR if you don't have an image, use a text logo: -->
+                <!-- <div style="font-size: 24px; font-weight: bold; color: #667eea;">OPTIMUS</div> -->
+            </div>
         </div>
 
         <!-- WebSocket Status -->
@@ -1314,27 +1358,45 @@
         <div class="trading-controls">
             <button class="control-btn connect" onclick="connectWebSocket()">🔌 CONNECT</button>
             <button class="control-btn disconnect" onclick="disconnectWebSocket()">⚡ DISCONNECT</button>
-            <button class="control-btn market" onclick="subscribeMarket()">📡 MARKET DATA</button>
-            <button class="control-btn orders" onclick="subscribeOrders()">📦 ORDER UPDATES</button>
+            <!-- <button class="control-btn market" onclick="subscribeMarket()">📡 MARKET DATA</button>
+            <button class="control-btn orders" onclick="subscribeOrders()">📦 ORDER UPDATES</button> -->
         </div>
 
         <!-- Navigation -->
-        <div class="nav">
+        <!-- <div class="nav">
             <a href="#trading" class="active">TRADING</a>
             <a href="#orders">ORDER TYPES</a>
             <a href="#market-data">MARKET DATA</a>
             <a href="#holdings">HOLDINGS</a>
             <a href="#websocket">WEBSOCKET</a>
-        </div>
+        </div> -->
 
         <!-- Market Segments -->
         <div class="market-segments">
-            <div class="segment-card"><div class="name">KSE 100</div><div class="desc">100 Largest companies</div></div>
-            <div class="segment-card"><div class="name">KSE 30</div><div class="desc">Top 30 Liquid</div></div>
-            <div class="segment-card"><div class="name">KMI 30</div><div class="desc">Shariah Compliant</div></div>
-            <div class="segment-card"><div class="name">KSE ALL</div><div class="desc">All Companies</div></div>
-            <div class="segment-card"><div class="name">KMI ALL</div><div class="desc">All Shariah</div></div>
-            <div class="segment-card"><div class="name">PSXDIV20</div><div class="desc">Dividend Paying</div></div>
+            <div class="segment-card">
+                <div class="name">KSE 100</div>
+                <div class="desc">100 Largest companies</div>
+            </div>
+            <div class="segment-card">
+                <div class="name">KSE 30</div>
+                <div class="desc">Top 30 Liquid</div>
+            </div>
+            <div class="segment-card">
+                <div class="name">KMI 30</div>
+                <div class="desc">Shariah Compliant</div>
+            </div>
+            <div class="segment-card">
+                <div class="name">KSE ALL</div>
+                <div class="desc">All Companies</div>
+            </div>
+            <div class="segment-card">
+                <div class="name">KMI ALL</div>
+                <div class="desc">All Shariah</div>
+            </div>
+            <div class="segment-card">
+                <div class="name">PSXDIV20</div>
+                <div class="desc">Dividend Paying</div>
+            </div>
         </div>
 
         <!-- Trading View -->
@@ -1428,34 +1490,39 @@
                     <span>Size</span>
                     <span>Value</span>
                 </div>
-                
+
                 <!-- Asks -->
                 <div class="order-book-asks" id="orderBookAsks"></div>
-                
+
                 <!-- Current Price -->
                 <div class="current-price-bar" id="currentPriceBar">
                     <span class="bid-price" id="bestBid">18.61</span>
                     <span id="spread">0.00 (0.00%)</span>
                     <span class="ask-price" id="bestAsk">18.61</span>
                 </div>
-                
+
                 <!-- Bids -->
                 <div class="order-book-bids" id="orderBookBids"></div>
-                
+
                 <!-- Spread Indicator -->
                 <div class="spread-indicator">
                     <span>Spread</span>
                     <span id="spreadValue">0.00 (0.00%)</span>
                 </div>
-                
+
                 <!-- Stats -->
                 <div class="order-stats">
-                    <div class="stat-row"><span>Open</span><span class="stat-value" id="dailyOpen">112,539.17</span></div>
-                    <div class="stat-row"><span>High</span><span class="stat-value" id="dailyHigh">113,200.00</span></div>
+                    <div class="stat-row"><span>Open</span><span class="stat-value" id="dailyOpen">112,539.17</span>
+                    </div>
+                    <div class="stat-row"><span>High</span><span class="stat-value" id="dailyHigh">113,200.00</span>
+                    </div>
                     <div class="stat-row"><span>Low</span><span class="stat-value" id="dailyLow">112,100.00</span></div>
-                    <div class="stat-row"><span>Volume</span><span class="stat-value" id="dailyVolume">4,123,123</span></div>
-                    <div class="stat-row"><span>Total Bid Vol</span><span class="stat-value" id="totalBidVol">4,530</span></div>
-                    <div class="stat-row"><span>Total Ask Vol</span><span class="stat-value" id="totalAskVol">675</span></div>
+                    <div class="stat-row"><span>Volume</span><span class="stat-value" id="dailyVolume">4,123,123</span>
+                    </div>
+                    <div class="stat-row"><span>Total Bid Vol</span><span class="stat-value"
+                            id="totalBidVol">4,530</span></div>
+                    <div class="stat-row"><span>Total Ask Vol</span><span class="stat-value" id="totalAskVol">675</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1466,21 +1533,21 @@
                 <h2>2. WEBSOCKET MARKET DATA STREAMS</h2>
                 <div class="version">Real-Time · JWT Required</div>
             </div>
-            
+
             <!-- 2.1 General Connection -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">wss://md.optimuscapital.com/ws?token={jwt_token}</span>
                 <span class="endpoint-desc">General Connection</span>
             </div>
-            
+
             <!-- 2.2 Market Watch -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">market_watch</span>
                 <span class="endpoint-desc">Top-level data stream</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1492,7 +1559,7 @@
   "client_id": "user_12345"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('market-watch-update')">Copy</button>
@@ -1516,7 +1583,7 @@
   ]
 }</pre>
                 </div>
-                
+
                 <div class="json-title">⚠️ Error</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('market-watch-error')">Copy</button>
@@ -1529,14 +1596,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 2.3 Symbol Detail -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">symbol_detail</span>
                 <span class="endpoint-desc">Detailed symbol information</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1547,7 +1614,7 @@
   "symbol": "MEBL"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('symbol-detail-update')">Copy</button>
@@ -1580,14 +1647,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 2.4 Order Book -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">order_book</span>
                 <span class="endpoint-desc">Market depth - Level 2</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1599,7 +1666,7 @@
   "depth": 10
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('order-book-update')">Copy</button>
@@ -1621,14 +1688,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 2.5 Trade Tape -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">trade_tape</span>
                 <span class="endpoint-desc">Recent trades</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1639,7 +1706,7 @@
   "symbol": "MEBL"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('trade-tape-update')">Copy</button>
@@ -1659,14 +1726,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 2.6 OHLC Candle -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">ohlc</span>
                 <span class="endpoint-desc">Candlestick data</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1678,7 +1745,7 @@
   "interval": "1m"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('ohlc-update')">Copy</button>
@@ -1697,14 +1764,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 2.7 Index -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">index</span>
                 <span class="endpoint-desc">Market indices</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1715,7 +1782,7 @@
   "indices": ["KSE100", "KSE30", "KMI30"]
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('index-update')">Copy</button>
@@ -1737,14 +1804,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 2.8 Market Status -->
             <div class="endpoint-header">
                 <span class="method ws">WS</span>
                 <span class="endpoint-url">market_status</span>
                 <span class="endpoint-desc">Market status</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Subscribe</div>
                 <div class="json-box">
@@ -1754,7 +1821,7 @@
   "stream": "market_status"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Update</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('market-status-update')">Copy</button>
@@ -1777,14 +1844,14 @@
                 <h2>3. TRADING REST APIS</h2>
                 <div class="version">Base: https://api.optimuscapital.com/v1</div>
             </div>
-            
+
             <!-- 3.1 Authentication -->
             <div class="endpoint-header">
                 <span class="method">POST</span>
                 <span class="endpoint-url">/auth/login</span>
                 <span class="endpoint-desc">User authentication</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Request</div>
                 <div class="json-box">
@@ -1796,7 +1863,7 @@
   "device_type": "mobile"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Success (200)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('login-res')">Copy</button>
@@ -1820,7 +1887,7 @@
   "request_id": "req-123e4567-e89b-12d3-a456-426614174000"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">⚠️ Error (401)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('login-error')">Copy</button>
@@ -1836,13 +1903,13 @@
 }</pre>
                 </div>
             </div>
-            
+
             <div class="endpoint-header">
                 <span class="method">POST</span>
                 <span class="endpoint-url">/auth/refresh</span>
                 <span class="endpoint-desc">Refresh token</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Request</div>
                 <div class="json-box">
@@ -1851,7 +1918,7 @@
   "refresh_token": "dGhpc2lzYXJlZnJlc2h0b2tlbg=="
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Response</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('refresh-res')">Copy</button>
@@ -1865,13 +1932,13 @@
 }</pre>
                 </div>
             </div>
-            
+
             <div class="endpoint-header">
                 <span class="method">POST</span>
                 <span class="endpoint-url">/auth/logout</span>
                 <span class="endpoint-desc">Logout</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Request</div>
                 <div class="json-box">
@@ -1880,7 +1947,7 @@
   "refresh_token": "dGhpc2lzYXJlZnJlc2h0b2tlbg=="
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Response</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('logout-res')">Copy</button>
@@ -1892,14 +1959,14 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 3.2 Place Order -->
             <div class="endpoint-header">
                 <span class="method">POST</span>
                 <span class="endpoint-url">/orders</span>
                 <span class="endpoint-desc">Place order (Idempotency-Key required)</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Request</div>
                 <div class="json-box">
@@ -1916,7 +1983,7 @@
   "client_order_id": "my_order_ref_123"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Success (202)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('order-res')">Copy</button>
@@ -1939,7 +2006,7 @@
   "request_id": "req-123e4567-e89b-12d3-a456-426614174004"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">⚠️ Error (400)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('order-error')">Copy</button>
@@ -1955,85 +2022,225 @@
 }</pre>
                 </div>
             </div>
-            
+
             <!-- 3.3 Portfolio APIs -->
+            <!-- Portfolio Summary -->
             <div class="endpoint-header">
-                <span class="method">GET</span>
+                <span class="method">POST</span>
                 <span class="endpoint-url">/portfolio/summary</span>
-                <span class="endpoint-desc">Portfolio summary</span>
+                <span class="endpoint-desc">Get portfolio summary for user</span>
             </div>
-            
+
             <div class="json-section">
-                <div class="json-title">📥 Response</div>
+                <div class="json-title">📤 Request Payload</div>
+                <div class="json-box">
+                    <button class="copy-btn" onclick="copyJson('summary-req')">Copy</button>
+                    <pre>{
+  "user_id": "12345",              // User identifier from JWT or session
+  "client_id": "optimus_001",       // Client identifier
+  "include_details": true,          // Optional: include breakdown
+  "as_of_date": "2024-05-20",       // Optional: get historical snapshot
+  "request_timestamp": "2024-05-20T10:30:00.000Z"
+}</pre>
+                </div>
+
+                <div class="json-title">📥 Response (200 OK)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('portfolio-summary')">Copy</button>
                     <pre>{
   "status": "success",
+  "code": 200,
+  "message": "Portfolio summary retrieved successfully",
   "data": {
+    "user_id": "12345",
+    "account_number": "A12345678",
     "total_investment": 1250000.00,
     "current_value": 1320000.00,
     "total_pnl": 70000.00,
     "total_pnl_percent": 5.6,
     "day_change": 2500.00,
-    "day_change_percent": 0.19
+    "day_change_percent": 0.19,
+    "unrealized_pnl": 45000.00,
+    "realized_pnl": 25000.00,
+    "as_of": "2024-05-20T10:30:00.000Z",
+    "calculation_id": "calc_20240520_001"
   },
-  "request_id": "..."
+  "request_id": "req-123e4567-e89b-12d3-a456-426614174020"
+}</pre>
+                </div>
+
+                <div class="json-title">⚠️ Error Response</div>
+                <div class="json-box">
+                    <button class="copy-btn" onclick="copyJson('summary-error')">Copy</button>
+                    <pre>{
+  "status": "error",
+  "code": 400,
+  "message": "Invalid user_id or insufficient permissions",
+  "error_details": {
+    "field": "user_id",
+    "reason": "User not found or unauthorized"
+  },
+  "request_id": "req-123e4567-e89b-12d3-a456-426614174021"
 }</pre>
                 </div>
             </div>
-            
+
+            <!-- Holdings -->
             <div class="endpoint-header">
-                <span class="method">GET</span>
+                <span class="method">POST</span>
                 <span class="endpoint-url">/portfolio/holdings</span>
-                <span class="endpoint-desc">Holdings</span>
+                <span class="endpoint-desc">Get user's holdings</span>
             </div>
-            
+
             <div class="json-section">
-                <div class="json-title">📥 Response</div>
+                <div class="json-title">📤 Request Payload</div>
+                <div class="json-box">
+                    <button class="copy-btn" onclick="copyJson('holdings-req')">Copy</button>
+                    <pre>{
+  "user_id": "12345",
+  "client_id": "optimus_001",
+  "filter": {
+    "symbols": ["MEBL", "SYS"],        // Optional: filter by symbols
+    "sector": "Banks",                  // Optional: filter by sector
+    "include_zero": false,               // Optional: include zero holdings
+    "sort_by": "value",                  // Optional: sort field
+    "sort_order": "desc"                 // Optional: asc/desc
+  },
+  "pagination": {
+    "page": 1,
+    "limit": 50
+  },
+  "as_of_date": "2024-05-20",
+  "request_timestamp": "2024-05-20T10:30:00.000Z"
+}</pre>
+                </div>
+
+                <div class="json-title">📥 Response (200 OK)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('holdings-res')">Copy</button>
                     <pre>{
   "status": "success",
+  "code": 200,
+  "message": "Holdings retrieved successfully",
   "data": {
+    "user_id": "12345",
+    "account_number": "A12345678",
     "holdings": [
       {
         "symbol": "MEBL",
+        "symbol_name": "Meezan Bank Ltd",
+        "sector": "Commercial Banks",
         "quantity": 1000,
+        "available_quantity": 1000,
+        "locked_quantity": 0,
         "average_price": 180.50,
         "ltp": 187.50,
         "current_value": 187500,
+        "investment_value": 180500,
         "unrealized_pnl": 7000,
         "unrealized_pnl_percent": 3.88,
         "day_change": 100,
-        "day_change_percent": 0.05
+        "day_change_percent": 0.05,
+        "portfolio_weight": 0.142,
+        "cost_basis": 180500.00
+      },
+      {
+        "symbol": "SYS",
+        "symbol_name": "Systems Limited",
+        "sector": "Technology",
+        "quantity": 500,
+        "available_quantity": 500,
+        "locked_quantity": 0,
+        "average_price": 425.00,
+        "ltp": 432.10,
+        "current_value": 216050,
+        "investment_value": 212500,
+        "unrealized_pnl": 3550,
+        "unrealized_pnl_percent": 1.67,
+        "day_change": 250,
+        "day_change_percent": 0.58,
+        "portfolio_weight": 0.164,
+        "cost_basis": 212500.00
       }
-    ]
+    ],
+    "summary": {
+      "total_holdings_value": 1875000.00,
+      "total_investment": 1750000.00,
+      "total_unrealized_pnl": 125000.00,
+      "total_unrealized_pnl_percent": 7.14,
+      "number_of_positions": 12
+    },
+    "pagination": {
+      "current_page": 1,
+      "total_pages": 1,
+      "total_records": 12,
+      "limit": 50
+    },
+    "as_of": "2024-05-20T10:30:00.000Z"
   },
-  "request_id": "..."
+  "request_id": "req-123e4567-e89b-12d3-a456-426614174022"
 }</pre>
                 </div>
             </div>
-            
+
+            <!-- Buying Power -->
             <div class="endpoint-header">
-                <span class="method">GET</span>
+                <span class="method">POST</span>
                 <span class="endpoint-url">/account/buying-power</span>
-                <span class="endpoint-desc">Buying power</span>
+                <span class="endpoint-desc">Get user's buying power</span>
             </div>
-            
+
             <div class="json-section">
-                <div class="json-title">📥 Response</div>
+                <div class="json-title">📤 Request Payload</div>
+                <div class="json-box">
+                    <button class="copy-btn" onclick="copyJson('buying-req')">Copy</button>
+                    <pre>{
+  "user_id": "12345",
+  "client_id": "optimus_001",
+  "account_type": "cash",                // cash/margin/islamic
+  "include_settlement": true,             // Include T+2 projections
+  "for_symbol": "MEBL",                   // Optional: check specific symbol
+  "for_quantity": 500,                    // Optional: check for specific order
+  "for_price": 188.00,                    // Optional: check at specific price
+  "request_timestamp": "2024-05-20T10:30:00.000Z"
+}</pre>
+                </div>
+
+                <div class="json-title">📥 Response (200 OK)</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('buying-power')">Copy</button>
                     <pre>{
   "status": "success",
+  "code": 200,
+  "message": "Buying power retrieved successfully",
   "data": {
+    "user_id": "12345",
+    "account_number": "A12345678",
+    "account_type": "margin",
     "net_equity": 1500000.00,
     "cash_balance": 250000.00,
     "available_margin": 1250000.00,
     "used_margin": 250000.00,
-    "maintenance_margin": 75000.00
+    "maintenance_margin": 75000.00,
+    "margin_ratio": 0.167,
+    "margin_call_threshold": 50000.00,
+    "unsettled_funds": 50000.00,            // T+2 settlement pending
+    "unsettled_sales": 75000.00,             // Proceeds from recent sales
+    "buying_power_details": {
+      "intraday": 2500000.00,                // Higher for intraday
+      "delivery": 1250000.00,                 // Lower for delivery
+      "margin_multiplier": 2.0,
+      "cash_available": 250000.00,
+      "margin_available": 1000000.00
+    },
+    "collateral": {
+      "shares_as_collateral": 500000.00,
+      "cash_as_collateral": 250000.00,
+      "total_collateral": 750000.00
+    },
+    "as_of": "2024-05-20T10:30:00.000Z"
   },
-  "request_id": "..."
+  "request_id": "req-123e4567-e89b-12d3-a456-426614174023"
 }</pre>
                 </div>
             </div>
@@ -2045,13 +2252,13 @@
                 <h2>4. NOTIFICATION WEBHOOK</h2>
                 <div class="version">Vision Max → Optimus</div>
             </div>
-            
+
             <div class="endpoint-header">
                 <span class="method">POST</span>
                 <span class="endpoint-url">https://notifications.optimuscapital.com/webhook/visionmax</span>
                 <span class="endpoint-desc">IP Whitelist / X-API-Key</span>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-title">📤 Webhook Payload</div>
                 <div class="json-box">
@@ -2079,7 +2286,7 @@
   "version": "1.0"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📥 Acknowledgement</div>
                 <div class="json-box">
                     <button class="copy-btn" onclick="copyJson('webhook-ack')">Copy</button>
@@ -2088,7 +2295,7 @@
   "event_id": "evt_abc123def"
 }</pre>
                 </div>
-                
+
                 <div class="json-title">📋 Event Types</div>
                 <div class="json-box">
                     <pre>order.confirmed  - Order accepted by exchange
@@ -2098,7 +2305,7 @@ order.execution  - Partial or full fill
 margin.call      - Margin call threshold hit
 account.alert    - Deposit confirmation, withdrawal status</pre>
                 </div>
-                
+
                 <div class="json-title">🔄 Retry Mechanism</div>
                 <div class="json-box">
                     <pre>If no 2xx response within 5 seconds:
@@ -2113,7 +2320,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                 <h2>5. PSX-SPECIFIC CONSIDERATIONS</h2>
                 <div class="version">Pakistan Stock Exchange</div>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-box">
                     <pre>• T+2 Settlement: All cash and security balances reflect T+2 cycle
@@ -2135,7 +2342,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                 <h2>6. SECURITY & COMPLIANCE</h2>
                 <div class="version">TLS 1.2+ Required</div>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-box">
                     <pre>• Encryption: TLS 1.2+ (HTTPS for REST, WSS for WebSockets)
@@ -2157,7 +2364,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                 <h2>7. JSON STANDARDS</h2>
                 <div class="version">snake_case · ISO 8601</div>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-box">
                     <pre>• Naming Convention: snake_case for all JSON property names
@@ -2177,7 +2384,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                 <h2>8. ERROR CODES</h2>
                 <div class="version">Complete Reference</div>
             </div>
-            
+
             <div class="json-section">
                 <div class="json-box">
                     <pre>1001 Authentication - Invalid token - Re-authenticate
@@ -2263,7 +2470,8 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
 
         <div class="ws-console">
             <div class="console-header">
-                <span>Live Messages <span id="messageCount" style="color: #F0B90B; margin-left: 10px;">(12)</span></span>
+                <span>Live Messages <span id="messageCount"
+                        style="color: #F0B90B; margin-left: 10px;">(12)</span></span>
                 <button class="clear-btn" onclick="clearConsole()">Clear</button>
             </div>
             <div class="console-messages" id="wsMessages">
@@ -2302,8 +2510,9 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
 
         <!-- Footer -->
         <div class="footer">
-            <p>Optimus Capital Trading Platform v1.0 | Pakistan Stock Exchange (PSX) Integration for Vision Max</p>
-            <p>© 2026 Optimus Capital. All rights reserved. | All endpoints use POST where specified | Complete Request/Response JSON</p>
+            <p>Optimus Trading Platform | API integration document for Vision Max</p>
+            <p>© 2026 UHFSolutions. All rights reserved. | All endpoints use POST where specified | Complete
+                Request/Response JSON</p>
         </div>
     </div>
 
@@ -2342,10 +2551,10 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
         function addConsoleMessage(type, data) {
             const container = document.getElementById('wsMessages');
             if (!container) return;
-            
+
             const now = new Date();
-            const timeStr = `[${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}]`;
-            
+            const timeStr = `[${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}]`;
+
             const msgDiv = document.createElement('div');
             msgDiv.className = 'console-message';
             msgDiv.innerHTML = `
@@ -2353,12 +2562,12 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                 <span class="msg-type">${type}</span>
                 <span class="msg-data">${data}</span>
             `;
-            
+
             container.insertBefore(msgDiv, container.firstChild);
-            
+
             messageCount++;
             document.getElementById('messageCount').textContent = `(${messageCount})`;
-            
+
             while (container.children.length > 20) {
                 container.removeChild(container.lastChild);
             }
@@ -2427,7 +2636,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                 'webhook': '{\n  "event_id": "evt_abc123def",\n  "event_type": "order.execution",\n  "timestamp": "2024-05-20T10:21:00.000Z",\n  "data": {\n    "user_id": "12345",\n    "order_id": "ODR123456789",\n    "execution_details": {\n      "execution_id": "EXE987654",\n      "executed_quantity": 200,\n      "executed_price": 187.50,\n      "execution_time": "2024-05-20T10:20:59.500Z",\n      "remaining_quantity": 300,\n      "order_status": "partially_filled"\n    },\n    "reject_details": {\n      "reason_code": "INSUFFICIENT_BALANCE",\n      "reason_message": "Buying power check failed."\n    }\n  },\n  "version": "1.0"\n}',
                 'webhook-ack': '{\n  "status": "received",\n  "event_id": "evt_abc123def"\n}'
             };
-            
+
             if (jsons[type]) {
                 navigator.clipboard.writeText(jsons[type]).then(() => {
                     addConsoleMessage('JSON', `${type} copied to clipboard`);
@@ -2438,7 +2647,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
         }
 
         // PIN Input Handling
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const pinInputs = document.querySelectorAll('.pin-digit');
             pinInputs.forEach((input, index) => {
                 input.addEventListener('keyup', (e) => {
@@ -2458,38 +2667,38 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
             function generateCandles() {
                 const chart = document.getElementById('candleChart');
                 if (!chart) return;
-                
+
                 chart.innerHTML = '';
-                
+
                 for (let i = 0; i < 30; i++) {
                     const container = document.createElement('div');
                     container.className = 'candle-container';
-                    
+
                     const open = 187 + (Math.random() * 2);
                     const close = open + (Math.random() * 2 - 1);
                     const high = Math.max(open, close) + Math.random() * 0.5;
                     const low = Math.min(open, close) - Math.random() * 0.5;
-                    
+
                     const isGreen = close >= open;
-                    
+
                     const maxPrice = 190;
                     const minPrice = 185;
                     const priceRange = maxPrice - minPrice;
-                    
+
                     const openPercent = (open - minPrice) / priceRange;
                     const closePercent = (close - minPrice) / priceRange;
                     const highPercent = (high - minPrice) / priceRange;
                     const lowPercent = (low - minPrice) / priceRange;
-                    
+
                     const bodyHeight = Math.abs(closePercent - openPercent) * 250;
                     const wickTop = (highPercent - Math.max(openPercent, closePercent)) * 250;
                     const wickBottom = (Math.min(openPercent, closePercent) - lowPercent) * 250;
-                    
+
                     container.innerHTML = `
                         <div class="candle-wick" style="height: ${wickTop + bodyHeight + wickBottom}px; top: ${-wickTop}px;"></div>
                         <div class="candle-body ${isGreen ? 'green' : 'red'}" style="height: ${bodyHeight}px; width: 80%;"></div>
                     `;
-                    
+
                     chart.appendChild(container);
                 }
             }
@@ -2498,16 +2707,16 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
             function updateOrderBook() {
                 const bidsContainer = document.getElementById('orderBookBids');
                 const asksContainer = document.getElementById('orderBookAsks');
-                
+
                 if (!bidsContainer || !asksContainer) return;
-                
+
                 bidsContainer.innerHTML = '';
                 let totalBidVol = 0;
                 for (let i = 0; i < 8; i++) {
                     const price = (187.00 - i * 0.10).toFixed(2);
                     const volume = Math.floor(500 + Math.random() * 2000);
                     totalBidVol += volume;
-                    
+
                     const row = document.createElement('div');
                     row.className = 'order-book-row';
                     row.innerHTML = `
@@ -2517,14 +2726,14 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                     `;
                     bidsContainer.appendChild(row);
                 }
-                
+
                 asksContainer.innerHTML = '';
                 let totalAskVol = 0;
                 for (let i = 1; i <= 8; i++) {
                     const price = (187.60 + i * 0.10).toFixed(2);
                     const volume = Math.floor(400 + Math.random() * 1500);
                     totalAskVol += volume;
-                    
+
                     const row = document.createElement('div');
                     row.className = 'order-book-row';
                     row.innerHTML = `
@@ -2534,7 +2743,7 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
                     `;
                     asksContainer.appendChild(row);
                 }
-                
+
                 document.getElementById('totalBidVol').textContent = totalBidVol.toLocaleString();
                 document.getElementById('totalAskVol').textContent = totalAskVol.toLocaleString();
             }
@@ -2542,22 +2751,22 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
             // Initialize
             generateCandles();
             updateOrderBook();
-            
+
             // Update every 3 seconds
             setInterval(() => {
                 generateCandles();
                 updateOrderBook();
-                
+
                 // Update price
                 const change = (Math.random() - 0.5) * 0.5;
                 basePrice = 187.50 + change;
                 document.getElementById('currentPrice').textContent = basePrice.toFixed(2);
-                document.getElementById('priceChange').innerHTML = (change >= 0 ? '▲' : '▼') + ' ' + Math.abs(change).toFixed(2) + ' (' + (change/187.50*100).toFixed(2) + '%)';
-                
+                document.getElementById('priceChange').innerHTML = (change >= 0 ? '▲' : '▼') + ' ' + Math.abs(change).toFixed(2) + ' (' + (change / 187.50 * 100).toFixed(2) + '%)';
+
                 // Update latency
                 const latency = 8 + Math.floor(Math.random() * 15);
                 document.getElementById('wsLatency').textContent = latency + 'ms';
-                
+
                 // Update tick rate
                 const tickRate = 20 + Math.floor(Math.random() * 20);
                 document.getElementById('tickRate').textContent = tickRate;
@@ -2578,4 +2787,5 @@ Retry: 1s, 5s, 30s, 5m, 30m ... up to 24 hours</pre>
         });
     </script>
 </body>
+
 </html>
